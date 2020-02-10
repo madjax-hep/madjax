@@ -4,13 +4,13 @@ import random
 import os
 from timeit import default_timer as timer
 
-from dijet.processes.all_processes import *
-from dijet.model.parameters import ModelParameters, ParamCard
+import ee_to_mumuj.processes.all_processes
+from ee_to_mumuj.model.parameters import ModelParameters, ParamCard
 from madjax.phasespace.flat_phase_space_generator import FlatInvertiblePhasespace
 import jax
 module_name = os.path.basename(os.path.dirname(os.path.realpath( __file__ )))
 
-all_process_classes = [Matrix_1_uux_uuxuux, Matrix_1_uux_uuxddx, Matrix_1_uux_ddxddx, Matrix_1_udx_uuxudx, Matrix_1_udx_udxddx, Matrix_1_ddx_uuxddx]
+all_process_classes = [v for k,v in ee_to_mumuj.processes.all_processes.__dict__.items() if 'Matrix_' in k]
 
 # For now, the feature of specifying an SLHA param card to initialise
 # the value of independent parameters is not supported yet.

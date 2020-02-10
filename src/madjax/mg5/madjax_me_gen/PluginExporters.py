@@ -347,26 +347,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         # Write out the aloha routines in Python
         aloha_routines = []
         
-        # First add the default external wavefunction routines
-        copy_wf_template = True
-        if copy_wf_template:
-            wavefunction_routines = open(pjoin(plugin_path,'templates','wavefunctions.py'),'r').read()
-            open(pjoin(self.dir_path,'wavefunctions.py'),'w').write(wavefunction_routines)
-        else:
-            wavefunction_routines = open(pjoin(MG5DIR,'aloha','template_files','wavefunctions.py'),'r').read()
-            
-            _wf = wavefunction_routines.replace("= +", "= ")
-            _wf = _wf.replace("from math import sqrt, pow\n","from madjax.madjax_patch import sqrt, pow, complex, max, min\n")
-            _wf = _wf.replace("= -1*complex","= -1.0*complex")
-            _wf = _wf.replace("complex(-","complex(-1.0*")
-            
-            open(pjoin(self.dir_path,'wavefunctions.py'),'w').write(_wf)
-        
-        ###open(pjoin(self.dir_path,'wavefunctions.py'),'w').write(
-        ###    'from __future__ import division\n'+wavefunction_routines)
-
-        #aloha_routines.append(open(pjoin(MG5DIR,'aloha','template_files','wavefunctions.py'),'r').read())
-
         # Now write the process-depenent Feynman rules ones
         for routine in self.aloha_model.values():
             aloha_routines.append(routine.write(output_dir = None, 
@@ -397,11 +377,11 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         # Veto some imports
         vetoed_imports = ['import aloha.template_files.wavefunctions as wavefunctions']
         python_imports = [pi for pi in python_imports if pi not in vetoed_imports]
-        python_imports.insert(0, 'from . import wavefunctions')
+        python_imports.insert(0, 'from madjax import wavefunctions')
 
         aloha_output = open(pjoin(self.dir_path,'aloha_methods.py'),'w')
         aloha_output.write('from __future__ import division\n')
-        aloha_output.write('from . import wavefunctions\n')
+        aloha_output.write('from madjax import wavefunctions\n')
         aloha_output.write('from madjax.madjax_patch import complex\n')
         aloha_output.write('from jax.numpy import where\n')
         # Write imports
@@ -618,7 +598,7 @@ sys.path.insert(0, root_path)
         # First add common imports
         all_processes.write('from __future__ import division\n')
         all_processes.write('from model.aloha_methods import *\n')
-        all_processes.write('from model.wavefunctions import *\n')
+        all_processes.write('from madjax.wavefunctions import *\n')
         all_processes.write('from jax import vmap \n')
         all_processes.write('from jax import numpy as np \n')
         all_processes.close()
