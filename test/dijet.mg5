@@ -1,0 +1,7 @@
+define ud=u d
+define udx=u~ d~
+define v = a z
+generate ud udx > ud udx ud udx
+!rm -rf dijet 
+output Python dijet
+set auto_update 0

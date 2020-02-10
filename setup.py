@@ -65,5 +65,6 @@ setup(
     install_requires=["jax~=0.1,>0.1.51", "jaxlib~=0.1,>0.1.33"],
     extras_require=extras_require,
     dependency_links=[],
+    entry_points={'console_scripts': ['madjax-config=madjax.cli:cli']},
     use_scm_version=lambda: {"local_scheme": lambda version: ""},
 )
