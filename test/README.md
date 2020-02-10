@@ -9,5 +9,5 @@ docker run --rm -it -v `madjax-config`:/code/madgraph/PLUGIN/madjax_me_gen -v $P
 * run a test script
 
 ```
-python testME.py
+python testME.py ee_to_mumuj
 ```
