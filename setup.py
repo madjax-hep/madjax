@@ -50,7 +50,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/lukasheinrich/madjax",
     author="Lukas Heinrich, Michael Kagan",
-    author_email="lukas.heinrich@cern.ch, mkagan@cern.ch",
+    author_email="lukas.heinrich@cern.ch, makagan@slac.stanford.edu",
     license="Apache",
     keywords="physics autodifferentiation",
     classifiers=[
