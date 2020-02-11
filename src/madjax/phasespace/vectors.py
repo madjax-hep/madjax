@@ -19,43 +19,12 @@ import jax
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
-
-class InvalidOperation(Exception):
-    pass
-
-
-def almost_equal(x, y, rel_tol=0, abs_tol=0):
-    """Check if two objects are equal within certain relative and absolute tolerances.
-    The operations abs(x + y) and abs(x - y) need to be well-defined
-    for this function to work.
-
-    :param x: first object to be compared
-    :param y: second object to be compared
-    :param rel_tol: relative tolerance for the comparison
-    :param abs_tol: absolute tolerance for the comparison
-    :return: True if the elements are equal within tolerance, False otherwise
-    :rtype: bool
-    """
-
-    diffxy = abs(x - y)
-    if diffxy <= abs_tol:
-        return True
-    sumxy = abs(x + y)
-    # Rough check that the ratio is smaller than 1 to avoid division by zero
-    if sumxy < diffxy:
-        return False
-    return diffxy / sumxy <= rel_tol
-
-
 class _Vector3(object):
     def __init__(self, vec):
         self.vector = np.asarray(vec)
 
     def __getitem__(self, index):
         return self.vector[index]
-
-    def square(self):
-        return self.vector.dot(self.vector)
 
     def __truediv__(self, scalar):
         return _Vector3(self.vector / scalar)
@@ -68,6 +37,9 @@ class _Vector3(object):
 
     def __mull__(self, scalar):
         return _Vector3(self.vector * scalar)
+
+    def square(self):
+        return self.vector.dot(self.vector)
 
 
 class _Vector(object):
