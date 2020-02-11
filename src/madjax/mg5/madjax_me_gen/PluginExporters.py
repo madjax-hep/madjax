@@ -272,7 +272,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
 
         return file_py
 
-    def write_parameters_dict(self, params, indent=8, attr_name = '_result_params'):
+    def write_parameters_dict(self, params, indent=8, attr_name='_result_params'):
         """Write out the definitions of parameters"""
 
         # For each parameter type, write out the definition forcing a cast into the right type
@@ -287,7 +287,13 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
             else:
                 res_strings.append(
                     '%s%s["%s"] = %s(%s)'
-                    % (' ' * indent, attr_name, param.name, self.type_dict[param.type], param.name)
+                    % (
+                        ' ' * indent,
+                        attr_name,
+                        param.name,
+                        self.type_dict[param.type],
+                        param.name,
+                    )
                 )
 
         return '\n'.join(res_strings)
@@ -318,7 +324,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                 )
 
         return "\n".join(res_strings)
-
 
     # Routines for writing the ALOHA files
 

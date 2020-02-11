@@ -14,9 +14,7 @@
 ##########################################################################################
 
 import logging
-import math
-import copy
-import numpy as np
+import jax.numpy as np
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
@@ -162,8 +160,7 @@ class _Vector(object):
         return self.space() / self.rho()
 
     def phi(self):
-
-        return math.atan2(self[2], self[1])
+        return np.atan2(self[2], self[1])
 
     def boost(self, boost_vector, gamma=-1.0):
         """Transport self into the rest frame of the boost_vector in argument.
@@ -218,5 +215,3 @@ class LorentzVector(Vector):
         if len(args) == 0:
             return super(LorentzVector, cls).__new__(cls, [0.0, 0.0, 0.0, 0.0], **opts)
         return super(LorentzVector, cls).__new__(cls, *args, **opts)
-
-

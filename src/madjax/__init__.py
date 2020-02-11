@@ -35,9 +35,7 @@ class MadJax(object):
                 beam_types=(0, 0),
             )
 
-            PS_point, jacobian = ps_generator.generateKinematics(
-                E_cm, random_variables
-            )
+            PS_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
             return process.smatrix(PS_point, parameters)
 
         if return_grad:
