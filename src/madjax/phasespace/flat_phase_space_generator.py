@@ -5,7 +5,6 @@ import jax
 import logging
 import math
 from .vectors import Vector, LorentzVector
-from .vectors import LorentzVectorDict, LorentzVectorList
 
 logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
@@ -494,7 +493,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         # Apply the phase-space weight
         wgt *= PS_weight
 
-        return LorentzVectorList(PS_point), wgt, (xb_1, xi1), (xb_2, xi2)
+        return PS_point, wgt, (xb_1, xi1), (xb_2, xi2)
 
     def generateKinematics(self, E_cm, random_variables):
         """Generate a self.n_initial -> self.n_final phase-space point
@@ -593,7 +592,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         self.setInitialStateMomenta(output_momenta, E_cm)
 
-        return LorentzVectorList(output_momenta), weight
+        return output_momenta, weight
 
     def generateIntermediatesMassless(self, M, E_cm, random_variables):
         """Generate intermediate masses for a massless final state."""
