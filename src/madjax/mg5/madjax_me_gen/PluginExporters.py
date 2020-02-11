@@ -227,35 +227,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         replace_dict['model_name'] = self.model_name
 
         replace_dict[
-            'independent_parameters'
-        ] = "%s# Model parameters independent of aS\n" % (
-            ' ' * indent
-        ) + self.write_parameters(
-            self.params_indep
-        )
-        replace_dict[
-            'independent_couplings'
-        ] = "%s# Model parameters dependent on aS\n" % (
-            ' ' * indent
-        ) + self.write_parameters(
-            self.params_dep
-        )
-        replace_dict[
-            'dependent_parameters'
-        ] = "%s# Model couplings independent of aS\n" % (
-            ' ' * indent
-        ) + self.write_parameters(
-            self.coups_indep
-        )
-        replace_dict[
-            'dependent_couplings'
-        ] = "%s# Model couplings dependent on aS\n" % (
-            ' ' * indent
-        ) + self.write_parameters(
-            self.coups_dep.values()
-        )
-
-        replace_dict[
             'independent_parameters_dict'
         ] = "%s# Model parameters independent of aS\n" % (
             ' ' * indent
@@ -300,27 +271,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         file_py = self.read_template_file(self.param_template_py) % replace_dict
 
         return file_py
-
-    def write_parameters(self, params, indent=8):
-        """Write out the definitions of parameters"""
-
-        # For each parameter type, write out the definition forcing a cast into the right type
-        res_strings = []
-        # for param in params:
-        #     # Not needed in Python, but kept for potential future use
-        #     if param.type == 'real':
-        #         res_strings.append(
-        #             '%sself.%s = %s(%s.real)'
-        #             % (' ' * indent, param.name, '', param.name)
-        #         )
-        #         # res_strings.append('%sself.%s = %s(%s.real)'%(' '*indent, param.name, self.type_dict[param.type], param.name))
-        #     else:
-        #         res_strings.append(
-        #             '%sself.%s = %s(%s)'
-        #             % (' ' * indent, param.name, self.type_dict[param.type], param.name)
-        #         )
-
-        return '\n'.join(res_strings)
 
     def write_parameters_dict(self, params, indent=8, attr_name = '_result_params'):
         """Write out the definitions of parameters"""
