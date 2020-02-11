@@ -15,6 +15,7 @@
 
 import logging
 import jax.numpy as np
+import jax
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
@@ -46,13 +47,6 @@ def almost_equal(x, y, rel_tol=0, abs_tol=0):
     return diffxy / sumxy <= rel_tol
 
 
-# =========================================================================================
-# Vector
-# =========================================================================================
-import jax.numpy as np
-import jax
-
-
 class _Vector3(object):
     def __init__(self, vec):
         self.vector = np.asarray(vec)
@@ -61,7 +55,6 @@ class _Vector3(object):
         return self.vector[index]
 
     def square(self):
-
         return self.vector.dot(self.vector)
 
     def __truediv__(self, scalar):
@@ -106,7 +99,6 @@ class _Vector(object):
         return self.vector
 
     def square(self):
-
         return self.dot(self.vector)
 
     def set_square(self, square, negative=False):
@@ -146,7 +138,6 @@ class _Vector(object):
 
     def rho2(self):
         """Compute the radius squared."""
-
         return self.space().square()
 
     def rho(self):
@@ -156,7 +147,6 @@ class _Vector(object):
 
     def space_direction(self):
         """Compute the corresponding unit vector in ordinary space."""
-
         return self.space() / self.rho()
 
     def phi(self):
@@ -168,7 +158,6 @@ class _Vector(object):
             p.boost(-p.boostVector())
         transforms p to (M,0,0,0).
         """
-
         b2 = boost_vector.square()
         if gamma < 0.0:
             gamma = 1.0 / jax.numpy.sqrt(1.0 - b2)
@@ -182,17 +171,11 @@ class _Vector(object):
         return self
 
     def boostVector(self):
-
         if self == LorentzVector():
             return Vector([0.0] * 3)
-        # if self[0] <= 0. or self.square() < 0.:
-        #     logger.critical("Attempting to compute a boost vector from")
-        #     logger.critical("%s (%.9e)" % (str(self), self.square()))
-        #     raise InvalidOperation
         return self.space() / self[0]
 
     def cosTheta(self):
-
         ptot = self.rho()
         assert ptot > 0.0
         return self[3] / ptot
