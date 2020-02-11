@@ -4,7 +4,7 @@ import os
 import jax
 import logging
 import math
-from .vectors import Vector, LorentzVector
+from .vectors import LorentzVector
 
 logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
