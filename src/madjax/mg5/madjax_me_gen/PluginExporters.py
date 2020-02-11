@@ -10,7 +10,6 @@ import os
 import stat
 import logging
 import itertools
-from pprint import pformat
 from math import fmod
 import aloha
 import shutil
@@ -150,7 +149,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
             expression = ""
             assert param.value.imag == 0
             if len(param.lhacode) == 1:
-                expression = "%s = slha.get_block_entry(\"%s\", %d, %e);" % (
+                expression = "%s = slha.get((\"%s\", %d), %e);" % (
                     param.name,
                     param.lhablock.lower(),
                     param.lhacode[0],
@@ -161,7 +160,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                     param.lhacode[0],
                     param.lhacode[1],
                 )
-                expression += "%s = slha.get_block_entry(\"%s\", indices, %e);" % (
+                expression += "%s = slha.get((\"%s\", indices), %e);" % (
                     param.name,
                     param.lhablock.lower(),
                     param.value.real,
@@ -298,19 +297,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
             self.coups_dep.values()
         )
 
-        replace_dict['print_independent_parameters'] = self.write_print_parameters(
-            self.params_indep
-        )
-        replace_dict['print_independent_couplings'] = self.write_print_parameters(
-            self.coups_indep
-        )
-        replace_dict['print_dependent_parameters'] = self.write_print_parameters(
-            self.params_dep
-        )
-        replace_dict['print_dependent_couplings'] = self.write_print_parameters(
-            self.coups_dep.values()
-        )
-
         file_py = self.read_template_file(self.param_template_py) % replace_dict
 
         return file_py
@@ -320,23 +306,23 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
 
         # For each parameter type, write out the definition forcing a cast into the right type
         res_strings = []
-        for param in params:
-            # Not needed in Python, but kept for potential future use
-            if param.type == 'real':
-                res_strings.append(
-                    '%sself.%s = %s(%s.real)'
-                    % (' ' * indent, param.name, '', param.name)
-                )
-                # res_strings.append('%sself.%s = %s(%s.real)'%(' '*indent, param.name, self.type_dict[param.type], param.name))
-            else:
-                res_strings.append(
-                    '%sself.%s = %s(%s)'
-                    % (' ' * indent, param.name, self.type_dict[param.type], param.name)
-                )
+        # for param in params:
+        #     # Not needed in Python, but kept for potential future use
+        #     if param.type == 'real':
+        #         res_strings.append(
+        #             '%sself.%s = %s(%s.real)'
+        #             % (' ' * indent, param.name, '', param.name)
+        #         )
+        #         # res_strings.append('%sself.%s = %s(%s.real)'%(' '*indent, param.name, self.type_dict[param.type], param.name))
+        #     else:
+        #         res_strings.append(
+        #             '%sself.%s = %s(%s)'
+        #             % (' ' * indent, param.name, self.type_dict[param.type], param.name)
+        #         )
 
         return '\n'.join(res_strings)
 
-    def write_parameters_dict(self, params, indent=8):
+    def write_parameters_dict(self, params, indent=8, attr_name = '_result_params'):
         """Write out the definitions of parameters"""
 
         # For each parameter type, write out the definition forcing a cast into the right type
@@ -345,13 +331,13 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
             # Not needed in Python, but kept for potential future use
             if param.type == 'real':
                 res_strings.append(
-                    '%sself.params["%s"] = %s(%s.real)'
-                    % (' ' * indent, param.name, '', param.name)
+                    '%s%s["%s"] = %s(%s.real)'
+                    % (' ' * indent, attr_name, param.name, '', param.name)
                 )
             else:
                 res_strings.append(
-                    '%sself.params["%s"] = %s(%s)'
-                    % (' ' * indent, param.name, self.type_dict[param.type], param.name)
+                    '%s%s["%s"] = %s(%s)'
+                    % (' ' * indent, attr_name, param.name, self.type_dict[param.type], param.name)
                 )
 
         return '\n'.join(res_strings)
@@ -383,25 +369,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
 
         return "\n".join(res_strings)
 
-    def write_print_parameters(self, params, indent=8):
-        """Write out the lines of independent parameters"""
-
-        # For each parameter, write name = expr;
-
-        res_strings = []
-        for param in params:
-            if param.type == "complex":
-                res_strings.append(
-                    "%sres.append('{:<20s} = {:<20.16e}'.format('%s',self.%s[0]))"
-                    % (' ' * indent, param.name, param.name)
-                )
-            else:
-                res_strings.append(
-                    "%sres.append('{:<20s} = {:<20.16e}'.format('%s',self.%s))"
-                    % (' ' * indent, param.name, param.name)
-                )
-
-        return "\n".join(res_strings)
 
     # Routines for writing the ALOHA files
 
@@ -593,8 +560,8 @@ class PythonMEExporter(export_python.ProcessExporterPython):
                 final_masses.append(self.model.get_particle(leg.get('id')).get('mass'))
 
         return '( (%s), (%s) )' % (
-            ', '.join('model.%s' % mass for mass in initial_masses),
-            ', '.join('model.%s' % mass for mass in final_masses),
+            ', '.join('params["%s"]' % mass for mass in initial_masses),
+            ', '.join('params["%s"]' % mass for mass in final_masses),
         )
 
     def get_model_parameter_lines(self, matrix_element):

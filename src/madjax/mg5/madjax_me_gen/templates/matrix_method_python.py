@@ -7,7 +7,7 @@ class Matrix_%(process_string)s(object):
     def clean(self):
         self.jamp = []
 
-    def get_external_masses(self, model):
+    def get_external_masses(self, params):
 
         return %(external_masses)s
 

@@ -502,7 +502,10 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         """
 
         # Make sure the right number of random variables are passed
-        assert len(random_variables) == self.nDimPhaseSpace()
+        try:
+            assert len(random_variables) == self.nDimPhaseSpace()
+        except:
+            raise RuntimeError('need {} random variables'.format(self.nDimPhaseSpace()))
 
         # Make sure that none of the random_variables is NaN.
         # Lukas: not part of computation ignore for now
