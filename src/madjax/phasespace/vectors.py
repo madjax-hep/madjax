@@ -19,6 +19,7 @@ import jax
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
+
 class _Vector3(object):
     def __init__(self, vec):
         self.vector = np.asarray(vec)

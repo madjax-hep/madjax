@@ -58,7 +58,6 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
         args = self.split_arg(line)
         super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['madjax'] + args))
 
-
     def export(self, *args, **opts):
         """Overwrite this so as to force a pythia8 type of output if the output mode is PY8MEs."""
 
