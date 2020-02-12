@@ -35,8 +35,8 @@ jobs:
       if: matrix.python-version == 3.7 && matrix.os == 'ubuntu-latest'
       run: |
         black --check --diff --verbose .
-    - name: Check docstrings
-      run: |
-        pydocstyle .
+    # - name: Check docstrings
+    #   run: |
+    #     pydocstyle .
 
 
