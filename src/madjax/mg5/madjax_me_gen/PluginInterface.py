@@ -48,22 +48,16 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
         """
 
         args = self.split_arg(line)
-        if len(args) >= 1 and args[0] == 'Python':
-            self.plugin_output_format_selected = 'Python'
+        if len(args) >= 1 and args[0] == 'madjax':
+            self.plugin_output_format_selected = 'madjax'
             self.do_output_PythonMEs(' '.join(args[1:]))
-        elif len(args) >= 1 and args[0] == 'TF':
-            self.plugin_output_format_selected = 'TF'
-            self.do_output_TFMEs(' '.join(args[1:]))
         else:
             super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(args))
 
     def do_output_PythonMEs(self, line):
         args = self.split_arg(line)
-        super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['Python'] + args))
+        super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['madjax'] + args))
 
-    def do_output_TFMEs(self, line):
-        args = self.split_arg(line)
-        super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['TF'] + args))
 
     def export(self, *args, **opts):
         """Overwrite this so as to force a pythia8 type of output if the output mode is PY8MEs."""
@@ -71,15 +65,10 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
         if self._export_format == 'plugin':
             # Also pass on the aloha model to the exporter (if it has been computed already)
             # so that it will be used when generating the model
-            if self.plugin_output_format_selected == 'Python':
+            if self.plugin_output_format_selected == 'madjax':
                 self._curr_exporter = PluginExporters.PluginProcessExporterPython(
                     self._export_dir,
                     helas_call_writers.PythonUFOHelasCallWriter(self._curr_model),
-                )
-            elif self.plugin_output_format_selected == 'TF':
-                self._curr_exporter = PluginExporters.PluginProcessExporterTF(
-                    self._export_dir,
-                    PluginExporters.UFOHelasCallWriterTF(self._curr_model),
                 )
             else:
                 raise MadGraph5Error(

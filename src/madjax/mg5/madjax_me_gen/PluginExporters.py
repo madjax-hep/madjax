@@ -42,8 +42,8 @@ pjoin = os.path.join
 class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
 
     # Static variables (for inheritance)
-    output_name = 'Python Standalone'
-    namespace = 'Python'
+    output_name = 'madjax standalone'
+    namespace = 'madjax'
 
     # Dictionary from Python type to C++ type
     type_dict = {"real": "float", "complex": "complex"}
@@ -62,7 +62,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
     aloha_template_h = None
     aloha_template_cc = None
 
-    param_template_py = 'model_template.py'
+    param_template_py = 'model_template.py.tmpl'
 
     copy_include_files = []
     copy_cc_files = []
@@ -403,7 +403,7 @@ class ProcessOutputPython(export_v4.ProcessExporterFortranSA):
 
 class PythonMEExporter(export_python.ProcessExporterPython):
 
-    matrix_method_template = 'matrix_method_python.py'
+    matrix_method_template = 'matrix_method.py.tmpl'
 
     def get_python_matrix_methods(self, gauge_check=False):
         """Write the matrix element calculation method for the processes"""

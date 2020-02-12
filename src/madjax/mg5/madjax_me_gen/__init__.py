@@ -10,7 +10,7 @@ import madjax_me_gen.PluginExporters as PluginExporters
 #    example: new_output = {'myformat': MYCLASS}
 #    madgraph will then allow the command "output myformat PATH"
 #    MYCLASS should inherated of the class madgraph.iolibs.export_v4.VirtualExporter
-new_output = {'Python': PluginExporters.ProcessOutputPython}
+new_output = {'madjax': PluginExporters.ProcessOutputPython}
 
 # 2. Define new way to handle the cluster.
 #    example new_cluster = {'mycluster': MYCLUSTERCLASS}
