@@ -116,7 +116,7 @@ class _Vector(object):
     def rho(self):
         """Compute the radius."""
 
-        return abs(self.space())
+        return abs(jax.numpy.sqrt(self.space().square()))
 
     def space_direction(self):
         """Compute the corresponding unit vector in ordinary space."""
