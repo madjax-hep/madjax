@@ -20,6 +20,7 @@ assert pow
 assert pi
 assert product
 
+
 def complex(*v):
     if len(v) == 1:
         return np.asarray(v, dtype=np.complex64)

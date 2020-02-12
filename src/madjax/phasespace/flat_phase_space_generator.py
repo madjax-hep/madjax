@@ -3,11 +3,14 @@ import logging
 import math
 from .vectors import LorentzVector
 
+
 class InvalidCmd(RuntimeError):
     pass
 
+
 class PhaseSpaceGeneratorError(RuntimeError):
     pass
+
 
 logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
