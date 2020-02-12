@@ -7,18 +7,14 @@
 #####################################################
 
 import os
-import stat
 import logging
-import itertools
-from math import fmod
 import aloha
-import shutil
 
 import aloha.create_aloha as create_aloha
 
 plugin_path = os.path.dirname(os.path.realpath(__file__))
 
-from madgraph import MadGraph5Error, InvalidCmd, MG5DIR
+from madgraph import MadGraph5Error
 
 import madgraph.iolibs.export_python as export_python
 import madgraph.iolibs.export_cpp as export_cpp
@@ -26,13 +22,7 @@ import madgraph.core.base_objects as base_objects
 from madgraph.iolibs.file_writers import PythonWriter
 
 import madgraph.iolibs.helas_call_writers as helas_call_writers
-
 import madgraph.iolibs.export_v4 as export_v4
-import madgraph.iolibs.file_writers as writers
-import madgraph.various.misc as misc
-from madgraph.iolibs.files import cp, ln, mv
-
-import madgraph.iolibs.helas_call_writers as helas_call_writers
 
 logger = logging.getLogger('MG5aMC_PythonMEs.MEExporter')
 
@@ -632,7 +622,7 @@ sys.path.insert(0, root_path)
         try:
             matrix_methods = exporter.get_python_matrix_methods(gauge_check=False)
             assert len(matrix_methods) == 1
-        except helas_call_writers.HelasWriterError, error:
+        except helas_call_writers.HelasWriterError as error:
             logger.critical(error)
             raise MadGraph5Error("Error when generation python matrix_element_methods.")
 

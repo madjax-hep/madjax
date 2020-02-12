@@ -1,6 +1,5 @@
 from __future__ import division
-import math
-from madjax.madjax_patch import sqrt, pow, complex, max, min
+from madjax.madjax_patch import sqrt, complex, max, min
 from itertools import product
 
 import jax.numpy as np

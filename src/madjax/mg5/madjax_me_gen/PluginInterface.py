@@ -9,15 +9,11 @@
 
 import os
 import logging
-import itertools
-import sys
 
-from madgraph import MadGraph5Error, InvalidCmd, MG5DIR
-import madgraph.various.progressbar as pbar
+from madgraph import MadGraph5Error, InvalidCmd
 import madgraph.interface.extended_cmd as cmd
 import madgraph.iolibs.helas_call_writers as helas_call_writers
 import madgraph.interface.madgraph_interface as madgraph_interface
-import madgraph.various.misc as misc
 import madjax_me_gen.PluginExporters as PluginExporters
 
 logger = logging.getLogger('MG5aMC_PythonMEs.Interface')

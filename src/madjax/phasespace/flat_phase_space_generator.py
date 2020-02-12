@@ -3,6 +3,12 @@ import logging
 import math
 from .vectors import LorentzVector
 
+class InvalidCmd(RuntimeError):
+    pass
+
+class PhaseSpaceGeneratorError(RuntimeError):
+    pass
+
 logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
 
@@ -14,10 +20,10 @@ class Dimension(object):
         self.folded = folded
 
     def length(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def random_sample(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class DiscreteDimension(Dimension):
@@ -33,13 +39,13 @@ class DiscreteDimension(Dimension):
         self.values = values
 
     def length(self):
-        if normalized:
-            return 1.0 / float(len(values))
+        if self.normalized:
+            return 1.0 / float(len(self.values))
         else:
             return 1.0
 
     def random_sample(self):
-        return np.int64(random.choice(values))
+        return jax.numpy.np.int64(random.choice(self.values))
 
 
 class ContinuousDimension(Dimension):
@@ -55,7 +61,7 @@ class ContinuousDimension(Dimension):
         return self.upper_bound - self.lower_bound
 
     def random_sample(self):
-        return np.float64(
+        return jax.numpy.float64(
             self.lower_bound + random.random() * (self.upper_bound - self.lower_bound)
         )
 
@@ -87,7 +93,7 @@ class DimensionList(list):
         return DimensionList(d for d in self if isinstance(d, ContinuousDimension))
 
     def random_sample(self):
-        return np.array([d.random_sample() for d in self])
+        return jax.numpy.array([d.random_sample() for d in self])
 
 
 # =========================================================================================

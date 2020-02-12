@@ -15,6 +15,10 @@ from jax.numpy import pi
 from itertools import product
 import jax.numpy as np
 
+assert sqrt
+assert pow
+assert pi
+assert product
 
 def complex(*v):
     if len(v) == 1:
