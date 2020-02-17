@@ -3,9 +3,6 @@ import logging
 import math
 from .vectors import LorentzVector
 
-from jax.config import config
-config.update('jax_enable_x64', True)
-
 class InvalidCmd(RuntimeError):
     pass
 
@@ -543,7 +540,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             weight = self.get_flatWeights(E_cm, 1)
             return output_momenta, weight
 
-        M = [jax.numpy.float64(0.0)] * (self.n_final - 1)
+        M = [0.0] * (self.n_final - 1)
         M[0] = E_cm
 
         weight *= self.generateIntermediatesMassive(M, E_cm, random_variables)
@@ -558,12 +555,6 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             if i < self.n_initial:
                 output_momenta.append(LorentzVector())
                 continue
-
-            _r = self.rho(
-                    M[i - self.n_initial],
-                    M[i - self.n_initial + 1],
-                    self.masses[i - self.n_initial],
-                )
 
             q = (
                 4.0
