@@ -17,15 +17,13 @@ import logging
 import jax.numpy as np
 import jax
 
-from jax.config import config
-config.update('jax_enable_x64', True)
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
 
 class _Vector3(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec, dtype=np.float64)
+        self.vector = np.asarray(vec)
 
     def __getitem__(self, index):
         return self.vector[index]
@@ -51,7 +49,7 @@ class _Vector3(object):
 
 class _Vector(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec, dtype=np.float64)
+        self.vector = np.asarray(vec)
 
     def __mul__(self, scalar):
         return _Vector(self.vector * scalar)
