@@ -17,12 +17,15 @@ import logging
 import jax.numpy as np
 import jax
 
+from jax.config import config
+config.update('jax_enable_x64', True)
+
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
 
 class _Vector3(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec)
+        self.vector = np.asarray(vec, dtype=np.float64)
 
     def __getitem__(self, index):
         return self.vector[index]
@@ -42,10 +45,13 @@ class _Vector3(object):
     def square(self):
         return self.vector.dot(self.vector)
 
+    def asarray(self):
+        return self.vector
+
 
 class _Vector(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec)
+        self.vector = np.asarray(vec, dtype=np.float64)
 
     def __mul__(self, scalar):
         return _Vector(self.vector * scalar)
@@ -116,14 +122,14 @@ class _Vector(object):
     def rho(self):
         """Compute the radius."""
 
-        return abs(jax.numpy.sqrt(self.space().square()))
+        return jax.numpy.sqrt(self.space().square())
 
     def space_direction(self):
         """Compute the corresponding unit vector in ordinary space."""
         return self.space() / self.rho()
 
     def phi(self):
-        return np.atan2(self[2], self[1])
+        return np.arctan2(self[2], self[1])
 
     def boost(self, boost_vector, gamma=-1.0):
         """Transport self into the rest frame of the boost_vector in argument.
@@ -131,12 +137,14 @@ class _Vector(object):
             p.boost(-p.boostVector())
         transforms p to (M,0,0,0).
         """
+       
         b2 = boost_vector.square()
+            
         if gamma < 0.0:
             gamma = 1.0 / jax.numpy.sqrt(1.0 - b2)
 
         bp = self.space().vector.dot(boost_vector.vector)
-        gamma2 = jax.numpy.where(b2 > 0, gamma - 1.0 / b2, 0.0)
+        gamma2 = jax.numpy.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
         factor = gamma2 * bp + gamma * self[0]
         # self.space().vector += factor*boost_vector.vector
         self[1:] += factor * boost_vector.vector
@@ -149,7 +157,7 @@ class _Vector(object):
         return self.space() / self[0]
 
     def cosTheta(self):
-        ptot = self.rho()
+        ptot = self.rho() 
         assert ptot > 0.0
         return self[3] / ptot
 
