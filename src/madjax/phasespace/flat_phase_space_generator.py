@@ -3,7 +3,6 @@ import logging
 import math
 from .vectors import LorentzVector
 
-
 class InvalidCmd(RuntimeError):
     pass
 
@@ -552,6 +551,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         for i in range(self.n_initial + self.n_final - 1):
 
+          
             if i < self.n_initial:
                 output_momenta.append(LorentzVector())
                 continue
@@ -585,6 +585,8 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             p = LorentzVector(
                 [0.0, q * sin_theta * cos_phi, q * sin_theta * sin_phi, q * cos_theta]
             )
+
+           
             p.set_square(self.masses[i - self.n_initial] ** 2)
             p.boost(Q.boostVector())
             p.set_square(self.masses[i - self.n_initial] ** 2)
@@ -616,6 +618,8 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         K[0] -= sum(self.masses)
 
         weight = self.generateIntermediatesMassless(K, E_cm, random_variables)
+
+        
         del M[:]
         M.extend(K)
 
@@ -628,15 +632,14 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             self.masses[self.n_final - 1],
             self.masses[self.n_final - 2],
         )
-
         for i in range(2, self.n_final):
             weight *= (
                 self.rho(M[i - 2], M[i - 1], self.masses[i - 2])
                 / self.rho(K[i - 2], K[i - 1], 0.0)
             ) * (M[i - 1] / K[i - 1])
 
+                
         weight *= jax.numpy.power(K[0] / M[0], 2 * self.n_final - 4)
-
         return weight
 
     def invertKinematics(self, E_cm, momenta):
@@ -644,7 +647,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         # Make sure the right number of momenta are passed
         assert len(momenta) == (self.n_initial + self.n_final)
-        moms = momenta.get_copy()
+        moms = momenta.copy()
 
         # The weight of the corresponding PS point
         weight = 1.0
