@@ -3,7 +3,7 @@
 ### Installation
 
 ```
-pyhton -m venv madjaxenv
+python -m venv madjaxenv
 source madjaxenv/bin/activate
 git clone https://github.com/lukasheinrich/madjax.git
 cd madjax
