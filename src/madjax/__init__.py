@@ -16,27 +16,42 @@ class MadJax(object):
             k: v for k, v in all_processes.__dict__.items() if 'Matrix_' in k
         }
 
-    def matrix_element(self, E_cm, process_name, return_grad=True):
+    def phasespapce_generator(self, E_cm, process_name):
         def func(external_parameters, random_variables):
-            # Generate a random PS point for this process
             parameters = self.parameters.calculate_full_parameters(external_parameters)
-
             process = self.processes[process_name]()
             external_masses = process.get_external_masses(parameters)
-
-            # Ensure that E_cm offers enough twice as much energy as necessary
-            # to produce the final states
-            assert E_cm > sum(external_masses[1]) * 2.0
-
             ps_generator = FlatInvertiblePhasespace(
                 external_masses[0],
                 external_masses[1],
                 beam_Es=(E_cm / 2.0, E_cm / 2.0),
                 beam_types=(0, 0),
             )
+            # Ensure that E_cm offers enough twice as much energy as necessary
+            # to produce the final states
+            assert E_cm > sum(external_masses[1]) * 2.0
 
+            return ps_generator
+        return func
+
+    
+    def jacobian(self, E_cm, process_name):
+        ps = self.phasespapce_generator(E_cm,process_name)
+        def func(external_parameters, random_variables):
+            ps_generator = ps(external_parameters, random_variables)
             PS_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
-            return process.smatrix(PS_point, parameters)
+            return jacobian
+        return jax.jit(func)
+
+
+    def matrix_element(self, E_cm, process_name, return_grad=True, return_jacobian = False):
+        ps = self.phasespapce_generator(E_cm,process_name)
+        def func(external_parameters, random_variables):
+            parameters = self.parameters.calculate_full_parameters(external_parameters)
+            ps_generator = ps(external_parameters, random_variables)
+            ps_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
+            process = self.processes[process_name]()
+            return process.smatrix(ps_point, parameters)
 
         if return_grad:
             return jax.jit(jax.value_and_grad(func))

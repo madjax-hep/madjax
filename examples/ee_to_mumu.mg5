@@ -1,0 +1,5 @@
+generate mu+ mu- > e+ e- 
+!rm -rf ee_to_mumu
+output madjax ee_to_mumu
+set auto_update 0
+#launch
