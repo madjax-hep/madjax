@@ -12,6 +12,7 @@ jobs:
   test:
 
     runs-on: ${{ matrix.os }}
+    container: scailfin/madgraph5-amc-nlo:mg5_amc2.8.1
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -28,6 +29,7 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install --quiet --no-cache-dir --ignore-installed --upgrade --editable .[test]
         python -m pip list
+        python --version
     - name: Test with pytest
       run: |
         python -m pytest -r sx
