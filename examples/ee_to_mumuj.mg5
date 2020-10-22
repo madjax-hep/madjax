@@ -2,6 +2,7 @@ define ud=u d
 define udx=u~ d~
 define v = a z
 generate mu+ mu- > e+ e- @1
-!rm -rf ee_to_mumuj
-output Python ee_to_mumuj
+!rm -rf ee_to_mumuj_output
+output ee_to_mumuj_output
 set auto_update 0
+!rm py.py
