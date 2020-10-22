@@ -3,6 +3,7 @@ import logging
 import math
 from .vectors import LorentzVector
 
+
 class InvalidCmd(RuntimeError):
     pass
 
@@ -270,7 +271,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
     @staticmethod
     def get_flatWeights(E_cm, n, mass=None):
-        """ Return the phase-space volume for a n massless final states.
+        """Return the phase-space volume for a n massless final states.
         Vol(E_cm, n) = (pi/2)^(n-1) *  (E_cm^2)^(n-2) / ((n-1)!*(n-2)!)
         """
         if n == 1:
@@ -551,7 +552,6 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         for i in range(self.n_initial + self.n_final - 1):
 
-          
             if i < self.n_initial:
                 output_momenta.append(LorentzVector())
                 continue
@@ -586,7 +586,6 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 [0.0, q * sin_theta * cos_phi, q * sin_theta * sin_phi, q * cos_theta]
             )
 
-           
             p.set_square(self.masses[i - self.n_initial] ** 2)
             p.boost(Q.boostVector())
             p.set_square(self.masses[i - self.n_initial] ** 2)
@@ -619,7 +618,6 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         weight = self.generateIntermediatesMassless(K, E_cm, random_variables)
 
-        
         del M[:]
         M.extend(K)
 
@@ -638,7 +636,6 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 / self.rho(K[i - 2], K[i - 1], 0.0)
             ) * (M[i - 1] / K[i - 1])
 
-                
         weight *= jax.numpy.power(K[0] / M[0], 2 * self.n_final - 4)
         return weight
 
@@ -662,10 +659,14 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         # The random variables that would yield this PS point.
         random_variables = [-1.0] * self.nDimPhaseSpace()
 
-        M = [0.0,] * (self.n_final - 1)
+        M = [
+            0.0,
+        ] * (self.n_final - 1)
         M[0] = E_cm
 
-        Q = [LorentzVector(),] * (self.n_final - 1)
+        Q = [
+            LorentzVector(),
+        ] * (self.n_final - 1)
         Q[0] = LorentzVector([M[0], 0.0, 0.0, 0.0])
 
         for i in range(2, self.n_final):

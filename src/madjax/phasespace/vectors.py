@@ -135,9 +135,9 @@ class _Vector(object):
             p.boost(-p.boostVector())
         transforms p to (M,0,0,0).
         """
-       
+
         b2 = boost_vector.square()
-            
+
         if gamma < 0.0:
             gamma = 1.0 / jax.numpy.sqrt(1.0 - b2)
 
@@ -155,7 +155,7 @@ class _Vector(object):
         return self.space() / self[0]
 
     def cosTheta(self):
-        ptot = self.rho() 
+        ptot = self.rho()
         assert ptot > 0.0
         return self[3] / ptot
 
