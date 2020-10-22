@@ -7,14 +7,13 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as readme_md
     long_description = readme_md.read()
 
 extras_require = {}
+extras_require["lint"] = sorted(set(["pyflakes", "black"]))
 extras_require["test"] = sorted(
     set(
         [
-            "pyflakes",
             "pytest~=3.5",
             "pydocstyle",
             "papermill~=1.0",
-            'black;python_version>="3.6"',  # Black is Python3 only
         ]
     )
 )
