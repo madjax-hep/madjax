@@ -16,25 +16,25 @@ import madgraph.iolibs.helas_call_writers as helas_call_writers
 import madgraph.interface.madgraph_interface as madgraph_interface
 import madjax_me_gen.PluginExporters as PluginExporters
 
-logger = logging.getLogger('MG5aMC_PythonMEs.Interface')
+logger = logging.getLogger('madjax_me_gen.Interface')
 
 pjoin = os.path.join
 
 
-class MG5aMC_PythonMEsPluginInterfaceError(MadGraph5Error):
-    """ Error of the Exporter of the MG5aMC_PythonMEs interface. """
+class madjax_me_genPluginInterfaceError(MadGraph5Error):
+    """ Error of the Exporter of the madjax_me_gen interface. """
 
 
-class MG5aMC_PythonMEsPluginInvalidCmd(InvalidCmd):
-    """ Invalid command issued to the MG5aMC_PythonMEs interface. """
+class madjax_me_genPluginInvalidCmd(InvalidCmd):
+    """ Invalid command issued to the madjax_me_gen interface. """
 
 
-class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
-    """Interface for steering the generation/output of MG5aMC_PythonMEs.
+class madjax_me_genInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
+    """Interface for steering the generation/output of madjax_me_gen.
     We make it inherit from CmdShell so that launch_ext_prog does not attempt to start in WebMode."""
 
     def __init__(self, *args, **opts):
-        super(MG5aMC_PythonMEsInterface, self).__init__(*args, **opts)
+        super(madjax_me_genInterface, self).__init__(*args, **opts)
         self.plugin_output_format_selected = None
 
     def do_output(self, line):
@@ -48,11 +48,11 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
             self.plugin_output_format_selected = 'madjax'
             self.do_output_PythonMEs(' '.join(args[1:]))
         else:
-            super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(args))
+            super(madjax_me_genInterface, self).do_output(' '.join(args))
 
     def do_output_PythonMEs(self, line):
         args = self.split_arg(line)
-        super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['madjax'] + args))
+        super(madjax_me_genInterface, self).do_output(' '.join(['madjax'] + args))
 
     def export(self, *args, **opts):
         """Overwrite this so as to force a pythia8 type of output if the output mode is PY8MEs."""
@@ -70,12 +70,12 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
                     "A plugin output format must have been specified at this stage."
                 )
 
-        super(MG5aMC_PythonMEsInterface, self).export(*args, **opts)
+        super(madjax_me_genInterface, self).export(*args, **opts)
 
     # command to change the prompt
     def preloop(self, *args, **opts):
         """only change the prompt after calling  the mother preloop command"""
-        super(MG5aMC_PythonMEsInterface, self).preloop(*args, **opts)
+        super(madjax_me_genInterface, self).preloop(*args, **opts)
         # The colored prompt screws up the terminal for some reason.
         # self.prompt = '\033[92mPY8Kernels > \033[0m'
-        self.prompt = 'MG5aMC_PythonMEs > '
+        self.prompt = 'madjax_me_gen > '

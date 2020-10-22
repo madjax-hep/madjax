@@ -12,7 +12,7 @@ class PhaseSpaceGeneratorError(RuntimeError):
     pass
 
 
-logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
+logger = logging.getLogger("madjax_me_gen.PhaseSpaceGenerator")
 
 
 class Dimension(object):

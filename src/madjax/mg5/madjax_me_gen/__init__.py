@@ -29,7 +29,7 @@ new_cluster = {}
 # 3. Define a new interface (allow to add/modify MG5 command)
 #    This can be activated via ./bin/mg5_aMC --mode=PLUGINNAME
 ## Put None if no dedicated command are required
-new_interface = PluginInterface.MG5aMC_PythonMEsInterface
+new_interface = PluginInterface.madjax_me_genInterface
 
 
 ########################## CONTROL VARIABLE ####################################

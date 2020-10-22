@@ -1,6 +1,6 @@
 #####################################################
 #                                                   #
-#  Source file of the MG5aMC_PythonMEs plugin.      #
+#  Source file of the madjax_me_gen plugin.      #
 #                                                   #
 #         author: Valentin Hirschi                  #
 #                                                   #
@@ -24,7 +24,7 @@ from madgraph.iolibs.file_writers import PythonWriter
 import madgraph.iolibs.helas_call_writers as helas_call_writers
 import madgraph.iolibs.export_v4 as export_v4
 
-logger = logging.getLogger('MG5aMC_PythonMEs.MEExporter')
+logger = logging.getLogger('madjax_me_gen.MEExporter')
 
 pjoin = os.path.join
 
