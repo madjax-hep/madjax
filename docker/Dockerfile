@@ -5,7 +5,6 @@ FROM ${BASE_IMAGE} as base
 USER root
 SHELL [ "/bin/bash", "-c" ]
 
-COPY src/madjax/mg5/madjax_me_gen /usr/local/MG5_aMC_v2_8_1/PLUGIN/madjax_me_gen
 COPY . /code
 
 # hadolint ignore=DL3003
@@ -18,7 +17,9 @@ RUN apt-get -qq -y update && \
     cd /code && \
     python -m pip install --upgrade --no-cache-dir pip setuptools wheel && \
     python -m pip install --no-cache-dir . && \
-    python -m pip list
+    python -m pip list && \
+    cp -r $(madjax-config) /usr/local/MG5_aMC_v2_8_1/PLUGIN/
+
 
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
 CMD ["/bin/bash"]
