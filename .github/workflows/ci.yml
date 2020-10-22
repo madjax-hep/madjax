@@ -15,7 +15,7 @@ jobs:
     container: scailfin/madgraph5-amc-nlo:mg5_amc2.8.1
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: [3.6, 3.7, 3.8]
 
     steps:
