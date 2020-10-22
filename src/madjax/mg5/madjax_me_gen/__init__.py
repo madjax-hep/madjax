@@ -1,3 +1,10 @@
+# TODO: Do this with pathlib.Path
+import os
+import sys
+
+root_path = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
+sys.path.insert(0, root_path)
+
 import madjax_me_gen.PluginInterface as PluginInterface
 import madjax_me_gen.PluginExporters as PluginExporters
 
@@ -27,7 +34,7 @@ new_interface = PluginInterface.MG5aMC_PythonMEsInterface
 ########################## CONTROL VARIABLE ####################################
 __author__ = 'Valentin Hirschi'
 __email__ = 'valentin.hirschi@gmail.com'
-__version__ = (1, 0, 0)
-minimal_mg5amcnlo_version = (2, 6, 6)
+__version__ = (0, 1, 0)
+minimal_mg5amcnlo_version = (2, 8, 1)
 maximal_mg5amcnlo_version = (1000, 1000, 1000)
-latest_validated_version = (2, 6, 6)
+latest_validated_version = (2, 8, 1)
