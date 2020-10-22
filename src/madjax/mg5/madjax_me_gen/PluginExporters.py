@@ -1,6 +1,6 @@
 #####################################################
 #                                                   #
-#  Source file of the madjax_me_gen plugin.      #
+#  Source file of the madjax_me_gen plugin.         #
 #                                                   #
 #         author: Valentin Hirschi                  #
 #                                                   #
