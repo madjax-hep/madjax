@@ -18,3 +18,7 @@ def complex(*v):
         return jnp.asarray(v, dtype=jnp.complex64)
     else:
         return jnp.asarray(v[0] + 1j * v[1], dtype=jnp.complex64)
+
+
+# Placate pyflakes
+__all__ = ["sqrt", "pow", "pi", "product"]
