@@ -15,7 +15,7 @@
 
 import logging
 import jax.numpy as jnp
-import jax
+from jax.ops import index_update
 
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
@@ -61,7 +61,7 @@ class _Vector(object):
         return self.vector[index]
 
     def __setitem__(self, index, value):
-        self.vector = jax.ops.index_update(self.vector, index, value)
+        self.vector = index_update(self.vector, index, value)
 
     def __sub__(self, other):
         return _Vector(self.vector - other.vector)
