@@ -30,7 +30,7 @@ class MG5aMC_PythonMEsPluginInvalidCmd(InvalidCmd):
 
 
 class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
-    """ Interface for steering the generation/output of MG5aMC_PythonMEs.
+    """Interface for steering the generation/output of MG5aMC_PythonMEs.
     We make it inherit from CmdShell so that launch_ext_prog does not attempt to start in WebMode."""
 
     def __init__(self, *args, **opts):
@@ -38,7 +38,7 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
         self.plugin_output_format_selected = None
 
     def do_output(self, line):
-        """ Wrapper to support the syntax output Python <args>.
+        """Wrapper to support the syntax output Python <args>.
         This just to add extra freedom in adding special action that may be needed at the output
         stage for these output formats.
         """

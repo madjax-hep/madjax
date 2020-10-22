@@ -189,7 +189,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
     # Routines for writing the parameter files
 
     def write_parameter_class_files(self):
-        """Generate the python model parameters 
+        """Generate the python model parameters
         which have the parameters and couplings for the model."""
 
         parameters_file_path = pjoin(self.dir_path, 'parameters.py')
