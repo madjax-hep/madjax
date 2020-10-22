@@ -34,3 +34,6 @@ jobs:
         cp -r $(madjax-config) /usr/local/MG5_aMC/PLUGIN/
         mg5_aMC --mode=madjax_me_gen examples/ee_to_mumuj.mg5
         ls -lhtra ee_to_mumuj_output/
+    - name: Test matrix element evaluation
+      run: |
+        python examples/testME.py ee_to_mumuj_output
