@@ -109,10 +109,8 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         the two lists params_indep and params_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        keys = self.model['parameters'].keys()
-        keys.sort(key=len)
         params_ext = []
-        for key in keys:
+        for key in sorted(self.model["parameters"]):
             if key == ('external',):
                 params_ext += [p for p in self.model['parameters'][key] if p.name]
             elif 'aS' in key:
@@ -166,8 +164,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         the two lists coups_indep and coups_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        keys = self.model['couplings'].keys()
-        keys.sort(key=len)
         for key, coup_list in self.model['couplings'].items():
             if "aS" in key:
                 for c in coup_list:
