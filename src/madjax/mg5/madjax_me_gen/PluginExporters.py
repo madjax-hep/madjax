@@ -179,7 +179,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                         )
 
         # Convert coupling expressions from Python to C++
-        for coup in self.coups_dep.values() + self.coups_indep:
+        for coup in list(self.coups_dep.values()) + self.coups_indep:
             coup.expr = coup.name + " = " + coup.expr
 
     # Routines for writing the parameter files
