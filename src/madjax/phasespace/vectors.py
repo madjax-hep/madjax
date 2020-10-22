@@ -160,7 +160,7 @@ class _Vector(object):
         return self[3] / ptot
 
 
-class Vector(np.ndarray):
+class Vector(jnp.ndarray):
     def __new__(cls, *args, **opts):
         if args and isinstance(args[0], Vector):
             vec = args[0]
