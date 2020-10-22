@@ -6,11 +6,11 @@ import jax.numpy as jnp
 
 
 def max(a, b):
-    return jax.numpy.max([a, b])
+    return jnp.max([a, b])
 
 
 def min(a, b):
-    return jax.numpy.min([a, b])
+    return jnp.min([a, b])
 
 
 def complex(*v):
