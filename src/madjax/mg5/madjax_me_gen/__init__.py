@@ -1,9 +1,10 @@
-# TODO: Do this with pathlib.Path
-import os
 import sys
+from pathlib import Path
 
-root_path = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
-sys.path.insert(0, root_path)
+# put plugins in path for madjax_me_gen import
+_mg5_aMC_PLUGIN_path = str(Path(__file__).resolve().parents[1])
+if _mg5_aMC_PLUGIN_path not in sys.path:
+    sys.path.append(_mg5_aMC_PLUGIN_path)
 
 import madjax_me_gen.PluginInterface as PluginInterface
 import madjax_me_gen.PluginExporters as PluginExporters
