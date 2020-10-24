@@ -12,9 +12,10 @@ jobs:
   test:
 
     runs-on: ${{ matrix.os }}
+    container: scailfin/madgraph5-amc-nlo:mg5_amc2.8.1
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: [3.6, 3.7, 3.8]
 
     steps:
@@ -31,3 +32,8 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest -r sx
+    - name: Test matrix element generation
+      run: |
+        cp -r $(madjax-config) /usr/local/MG5_aMC_v2_8_1/PLUGIN/
+        mg5_aMC --mode=madjax_me_gen examples/ee_to_mumuj.mg5
+        ls -lhtra ee_to_mumuj_output/

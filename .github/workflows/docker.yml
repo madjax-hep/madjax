@@ -1,0 +1,31 @@
+name: Docker build
+
+on:
+  pull_request:
+  # Run daily at 0:01 UTC
+  schedule:
+  - cron:  '1 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  docker:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Docker image
+      uses: docker/build-push-action@v1
+      with:
+        repository: madjax/madjax
+        dockerfile: docker/Dockerfile
+        tags: test
+        tag_with_sha: true
+        tag_with_ref: true
+        push: false
+    - name: List built images
+      run: docker images
+    - name: Run CLI API check
+      run: |
+        printf "\nmadjax-config\n"
+        docker run --rm madjax/madjax:test "madjax-config"
