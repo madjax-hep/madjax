@@ -7,7 +7,7 @@ for k, process_class in mj.processes.items():
 
     # Generate some random variables
     nDimPhaseSpace = 2
-    random_variables = [0.2] * 2
+    random_variables = [0.2] * nDimPhaseSpace
 
     # Center of mass of the collision in GeV
     matrix_element = mj.matrix_element(E_cm=125.0, process_name=k)
