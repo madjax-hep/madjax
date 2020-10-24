@@ -601,7 +601,7 @@ sys.path.insert(0, root_path)
         all_processes.write('from model.aloha_methods import *\n')
         all_processes.write('from madjax.wavefunctions import *\n')
         all_processes.write('from jax import vmap \n')
-        all_processes.write('from jax import numpy as np \n')
+        all_processes.write('from jax import numpy as jnp \n')
         all_processes.close()
 
         self.helas_call_writers = helas_call_writers

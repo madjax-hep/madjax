@@ -2,7 +2,7 @@ from __future__ import division
 from madjax.madjax_patch import sqrt, complex, max, min
 from itertools import product
 
-import jax.numpy as np
+import jax.numpy as jnp
 
 # from jax import jit
 
@@ -47,13 +47,13 @@ def ixxxxx(p, fmass, nhel, nsf):
         ip = (1 + nh) // 2
         im = (1 - nh) // 2
 
-        fi2 = ip * np.where(ip == 0, sqm_0, sqm_1)
-        fi3 = im * nsf * np.where(ip == 0, sqm_0, sqm_1)
-        fi4 = ip * nsf * np.where(im == 0, sqm_0, sqm_1)
-        fi5 = im * np.where(im == 0, sqm_0, sqm_1)
+        fi2 = ip * jnp.where(ip == 0, sqm_0, sqm_1)
+        fi3 = im * nsf * jnp.where(ip == 0, sqm_0, sqm_1)
+        fi4 = ip * nsf * jnp.where(im == 0, sqm_0, sqm_1)
+        fi5 = im * jnp.where(im == 0, sqm_0, sqm_1)
 
-        # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([fi2, fi3, fi4, fi5]))
+        # print("pp!= 0.", jnp.squeeze(jnp.array([fi2, fi3, fi4, fi5])))
+        return jnp.squeeze(jnp.array([fi2, fi3, fi4, fi5]))
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -65,12 +65,12 @@ def ixxxxx(p, fmass, nhel, nsf):
         ip = (1 + nh) // 2
         im = (1 - nh) // 2
 
-        sfomeg_0 = sf_0 * np.where(ip == 0, omega_0, omega_1)
-        sfomeg_1 = sf_1 * np.where(im == 0, omega_0, omega_1)
+        sfomeg_0 = sf_0 * jnp.where(ip == 0, omega_0, omega_1)
+        sfomeg_1 = sf_1 * jnp.where(im == 0, omega_0, omega_1)
 
         pp3 = max(pp + p[3], 0.0)
 
-        chi1 = np.where(
+        chi1 = jnp.where(
             pp3 == 0.0,
             complex(-1.0 * nh, 0.0),
             complex(nh * p[1] / sqrt(2.0 * pp * pp3), p[2] / sqrt(2.0 * pp * pp3)),
@@ -78,18 +78,18 @@ def ixxxxx(p, fmass, nhel, nsf):
 
         chi0 = complex(sqrt(pp3 * 0.5 / pp))
 
-        fi2 = sfomeg_0 * np.where(im == 0, chi0, chi1)
-        fi3 = sfomeg_0 * np.where(ip == 0, chi0, chi1)
-        fi4 = sfomeg_1 * np.where(im == 0, chi0, chi1)
-        fi5 = sfomeg_1 * np.where(ip == 0, chi0, chi1)
+        fi2 = sfomeg_0 * jnp.where(im == 0, chi0, chi1)
+        fi3 = sfomeg_0 * jnp.where(ip == 0, chi0, chi1)
+        fi4 = sfomeg_1 * jnp.where(im == 0, chi0, chi1)
+        fi5 = sfomeg_1 * jnp.where(ip == 0, chi0, chi1)
 
-        # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([fi2, fi3, fi4, fi5]))
+        # print("pp!= 0.", jnp.squeeze(jnp.array([fi2, fi3, fi4, fi5])))
+        return jnp.squeeze(jnp.array([fi2, fi3, fi4, fi5]))
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
 
-        fi2345 = np.where(
+        fi2345 = jnp.where(
             pp == 0.0,
             fmass_nonzero_pp_zero(p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp),
@@ -101,7 +101,7 @@ def ixxxxx(p, fmass, nhel, nsf):
     def fmass_zero(p, fmass, nhel, nsf, nh):
         sqp0p3 = sqrt(max(p[0] + p[3], 0.0)) * nsf
 
-        chi1 = np.where(
+        chi1 = jnp.where(
             sqp0p3 == 0.0,
             complex(-1.0 * nhel * sqrt(2.0 * p[0]), 0.0),
             complex(nh * p[1] / sqp0p3, p[2] / sqp0p3),
@@ -114,22 +114,22 @@ def ixxxxx(p, fmass, nhel, nsf):
             fi3 = complex(0.0, 0.0)
             fi4 = chi[0]
             fi5 = chi[1]
-            # print("nh==1", np.array([fi2, fi3, fi4, fi5]))
-            return np.array([fi2, fi3, fi4, fi5])
+            # print("nh==1", jnp.array([fi2, fi3, fi4, fi5]))
+            return jnp.array([fi2, fi3, fi4, fi5])
 
         def nh_not_one(chi):
             fi2 = chi[1]
             fi3 = chi[0]
             fi4 = complex(0.0, 0.0)
             fi5 = complex(0.0, 0.0)
-            # print("nh!=1", np.array([fi2, fi3, fi4, fi5]))
-            return np.array([fi2, fi3, fi4, fi5])
+            # print("nh!=1", jnp.array([fi2, fi3, fi4, fi5]))
+            return jnp.array([fi2, fi3, fi4, fi5])
 
-        fi2345 = np.where(nh == 1, nh_one(chi), nh_not_one(chi))
+        fi2345 = jnp.where(nh == 1, nh_one(chi), nh_not_one(chi))
         # print("fmass== 0.", fi2345)
-        return np.squeeze(fi2345)
+        return jnp.squeeze(fi2345)
 
-    fi2345 = np.where(
+    fi2345 = jnp.where(
         fmass != 0.0,
         fmass_nonzero(p, fmass, nhel, nsf, nh),
         fmass_zero(p, fmass, nhel, nsf, nh),
@@ -161,13 +161,13 @@ def oxxxxx(p, fmass, nhel, nsf):
         ip = -((1 - nh) // 2) * nhel
         im = (1 + nh) // 2 * nhel
 
-        fo2 = im * np.where(abs(im) == 0, sqm_0, sqm_1)
-        fo3 = ip * nsf * np.where(abs(im) == 0, sqm_0, sqm_1)
-        fo4 = im * nsf * np.where(abs(ip) == 0, sqm_0, sqm_1)
-        fo5 = ip * np.where(abs(ip) == 0, sqm_0, sqm_1)
+        fo2 = im * jnp.where(abs(im) == 0, sqm_0, sqm_1)
+        fo3 = ip * nsf * jnp.where(abs(im) == 0, sqm_0, sqm_1)
+        fo4 = im * nsf * jnp.where(abs(ip) == 0, sqm_0, sqm_1)
+        fo5 = ip * jnp.where(abs(ip) == 0, sqm_0, sqm_1)
 
-        # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([fo2, fo3, fo4, fo5]))
+        # print("pp!= 0.", jnp.squeeze(jnp.array([fo2, fo3, fo4, fo5])))
+        return jnp.squeeze(jnp.array([fo2, fo3, fo4, fo5]))
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -179,30 +179,30 @@ def oxxxxx(p, fmass, nhel, nsf):
         ip = (1 + nh) // 2
         im = (1 - nh) // 2
 
-        sfomeg_0 = sf_0 * np.where(ip == 0, omega_0, omega_1)
-        sfomeg_1 = sf_1 * np.where(im == 0, omega_0, omega_1)
+        sfomeg_0 = sf_0 * jnp.where(ip == 0, omega_0, omega_1)
+        sfomeg_1 = sf_1 * jnp.where(im == 0, omega_0, omega_1)
 
         pp3 = max(pp + p[3], 0.0)
 
-        chi1 = np.where(
+        chi1 = jnp.where(
             pp3 == 0.0,
             complex(-1.0 * nh, 0.0),
             complex(nh * p[1] / sqrt(2.0 * pp * pp3), -p[2] / sqrt(2.0 * pp * pp3)),
         )
         chi0 = complex(sqrt(pp3 * 0.5 / pp))
 
-        fo2 = sfomeg_1 * np.where(im == 0, chi0, chi1)
-        fo3 = sfomeg_1 * np.where(ip == 0, chi0, chi1)
-        fo4 = sfomeg_0 * np.where(im == 0, chi0, chi1)
-        fo5 = sfomeg_0 * np.where(ip == 0, chi0, chi1)
+        fo2 = sfomeg_1 * jnp.where(im == 0, chi0, chi1)
+        fo3 = sfomeg_1 * jnp.where(ip == 0, chi0, chi1)
+        fo4 = sfomeg_0 * jnp.where(im == 0, chi0, chi1)
+        fo5 = sfomeg_0 * jnp.where(ip == 0, chi0, chi1)
 
-        # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([fo2, fo3, fo4, fo5]))
+        # print("pp!= 0.", jnp.squeeze(jnp.array([fo2, fo3, fo4, fo5])))
+        return jnp.squeeze(jnp.array([fo2, fo3, fo4, fo5]))
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
 
-        fo2345 = np.where(
+        fo2345 = jnp.where(
             pp == 0.0,
             fmass_nonzero_pp_zero(p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp),
@@ -214,7 +214,7 @@ def oxxxxx(p, fmass, nhel, nsf):
     def fmass_zero(p, fmass, nhel, nsf, nh):
         sqp0p3 = sqrt(max(p[0] + p[3], 0.0)) * nsf
 
-        chi1 = np.where(
+        chi1 = jnp.where(
             sqp0p3 == 0.0,
             complex(-1.0 * nhel * sqrt(2.0 * p[0]), 0.0),
             complex(nh * p[1] / sqp0p3, -p[2] / sqp0p3),
@@ -227,22 +227,22 @@ def oxxxxx(p, fmass, nhel, nsf):
             fo3 = chi[1]
             fo4 = complex(0.0, 0.0)
             fo5 = complex(0.0, 0.0)
-            # print("nh==1", np.array([fo2, fo3, fo4, fo5]))
-            return np.array([fo2, fo3, fo4, fo5])
+            # print("nh==1", jnp.array([fo2, fo3, fo4, fo5]))
+            return jnp.array([fo2, fo3, fo4, fo5])
 
         def nh_not_one(chi):
             fo2 = complex(0.0, 0.0)
             fo3 = complex(0.0, 0.0)
             fo4 = chi[1]
             fo5 = chi[0]
-            # print("nh!=1", np.array([fo2, fo3, fo4, fo5]))
-            return np.array([fo2, fo3, fo4, fo5])
+            # print("nh!=1", jnp.array([fo2, fo3, fo4, fo5]))
+            return jnp.array([fo2, fo3, fo4, fo5])
 
-        fo2345 = np.where(nh == 1, nh_one(chi), nh_not_one(chi))
+        fo2345 = jnp.where(nh == 1, nh_one(chi), nh_not_one(chi))
         # print("fmass== 0.", fo2345)
-        return np.squeeze(fo2345)
+        return jnp.squeeze(fo2345)
 
-    fo2345 = np.where(
+    fo2345 = jnp.where(
         fmass != 0.0,
         fmass_nonzero(p, fmass, nhel, nsf, nh),
         fmass_zero(p, fmass, nhel, nsf, nh),
@@ -279,17 +279,17 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = p[1] / p[0]
         vc4 = p[2] / p[0]
         vc5 = p[2] / p[0]
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_4_vmass_nonzero(p, vmass):
         vc2 = p[0] / vmass
         vc3 = p[1] / vmass
         vc4 = p[2] / vmass
         vc5 = p[3] / vmass
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_4(p, vmass):
-        vc2345 = np.where(
+        vc2345 = jnp.where(
             vmass == 0.0, nhel_4_vmass_zero(p), nhel_4_vmass_nonzero(p, vmass)
         )
         return vc2345
@@ -299,7 +299,7 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = complex(-1.0 * nhel * sqh, 0.0)
         vc4 = complex(0.0, nsvahl * sqh)
         vc5 = complex(hel0, 0.0)
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_not4_vmass_nonzero_pp_nonzero_pt_nonzero(
         p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0, emp
@@ -311,7 +311,7 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = complex(hel0 * p[1] * emp - p[1] * pzpt, -nsvahl * p[2] / pt * sqh)
         vc4 = complex(hel0 * p[2] * emp - p[2] * pzpt, nsvahl * p[1] / pt * sqh)
 
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_not4_vmass_nonzero_pp_nonzero_pt_zero(
         p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0, emp
@@ -322,14 +322,14 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = complex(-1.0 * nhel * sqh, 0.0)
         vc4 = complex(0.0, nsvahl * sign(sqh, p[3]))
 
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_not4_vmass_nonzero_pp_nonzero(
         p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0
     ):
         emp = p[0] / (vmass * pp)
 
-        vc2345 = np.where(
+        vc2345 = jnp.where(
             pt != 0.0,
             nhel_not4_vmass_nonzero_pp_nonzero_pt_nonzero(
                 p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0, emp
@@ -344,7 +344,7 @@ def vxxxxx(p, vmass, nhel, nsv):
     def nhel_not4_vmass_nonzero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt):
         hel0 = 1.0 - abs(nhel)
 
-        vc2345 = np.where(
+        vc2345 = jnp.where(
             pp == 0.0,
             nhel_not4_vmass_nonzero_pp_zero(
                 p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0
@@ -364,7 +364,7 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = complex(-1.0 * p[1] * pzpt, -nsv * p[2] / pt * sqh)
         vc4 = complex(-1.0 * p[2] * pzpt, nsv * p[1] / pt * sqh)
 
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_not4_vmass_zero_pt_zero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt):
         vc2 = complex(0.0, 0.0)
@@ -373,13 +373,13 @@ def vxxxxx(p, vmass, nhel, nsv):
         vc3 = complex(-1.0 * nhel * sqh, 0.0)
         vc4 = complex(0.0, nsv * sign(sqh, p[3]))
 
-        return np.array([vc2, vc3, vc4, vc5])
+        return jnp.array([vc2, vc3, vc4, vc5])
 
     def nhel_not4_vmass_zero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt):
         pp = p[0]
         pt = sqrt(p[1] ** 2 + p[2] ** 2)
 
-        vc2345 = np.where(
+        vc2345 = jnp.where(
             pt != 0.0,
             nhel_not4_vmass_zero_pt_nonzero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
             nhel_not4_vmass_zero_pt_zero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
@@ -388,7 +388,7 @@ def vxxxxx(p, vmass, nhel, nsv):
         return vc2345
 
     def nhel_not4(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt):
-        vc2345 = np.where(
+        vc2345 = jnp.where(
             vmass != 0.0,
             nhel_not4_vmass_nonzero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
             nhel_not4_vmass_zero(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
@@ -396,7 +396,7 @@ def vxxxxx(p, vmass, nhel, nsv):
 
         return vc2345
 
-    vc2345 = np.where(
+    vc2345 = jnp.where(
         nhel == 4, nhel_4(p, vmass), nhel_not4(p, vmass, nhel, nsv, sqh, nsvahl, pp, pt)
     )
 
@@ -463,8 +463,8 @@ def vxxxxx(p, vmass, nhel, nsv):
 
 
 def sign(x, y):
-    _sign = np.where(type(y) == np.complex64, np.sign(y.real), np.sign(y))
-    return _sign * np.abs(x)
+    _sign = jnp.where(type(y) == jnp.complex64, jnp.sign(y.real), jnp.sign(y))
+    return _sign * jnp.abs(x)
 
 
 #    """Fortran's sign transfer function"""

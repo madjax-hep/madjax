@@ -1,28 +1,24 @@
-import jax.numpy
 from jax.numpy import sqrt
-
-
-def max(a, b):
-    return jax.numpy.max([a, b])
-
-
-def min(a, b):
-    return jax.numpy.min([a, b])
-
-
 from jax.numpy import power as pow
 from jax.numpy import pi
 from itertools import product
-import jax.numpy as np
+import jax.numpy as jnp
 
-assert sqrt
-assert pow
-assert pi
-assert product
+
+def max(a, b):
+    return jnp.max([a, b])
+
+
+def min(a, b):
+    return jnp.min([a, b])
 
 
 def complex(*v):
     if len(v) == 1:
-        return np.asarray(v, dtype=np.complex64)
+        return jnp.asarray(v, dtype=jnp.complex64)
     else:
-        return np.asarray(v[0] + 1j * v[1], dtype=np.complex64)
+        return jnp.asarray(v[0] + 1j * v[1], dtype=jnp.complex64)
+
+
+# Placate pyflakes
+__all__ = ["sqrt", "pow", "pi", "product"]

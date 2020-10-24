@@ -14,8 +14,8 @@
 ##########################################################################################
 
 import logging
-import jax.numpy as np
-import jax
+import jax.numpy as jnp
+from jax.ops import index_update
 
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
@@ -23,7 +23,7 @@ logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
 class _Vector3(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec)
+        self.vector = jnp.asarray(vec)
 
     def __getitem__(self, index):
         return self.vector[index]
@@ -49,7 +49,7 @@ class _Vector3(object):
 
 class _Vector(object):
     def __init__(self, vec):
-        self.vector = np.asarray(vec)
+        self.vector = jnp.asarray(vec)
 
     def __mul__(self, scalar):
         return _Vector(self.vector * scalar)
@@ -61,7 +61,7 @@ class _Vector(object):
         return self.vector[index]
 
     def __setitem__(self, index, value):
-        self.vector = jax.ops.index_update(self.vector, index, value)
+        self.vector = index_update(self.vector, index, value)
 
     def __sub__(self, other):
         return _Vector(self.vector - other.vector)
@@ -111,7 +111,7 @@ class _Vector(object):
     def square_almost_zero(self):
         """Check if the square of this LorentzVector is zero within numerical accuracy."""
 
-        return self.almost_zero(self.square() / np.dot(self, self))
+        return self.almost_zero(self.square() / jnp.dot(self, self))
 
     def rho2(self):
         """Compute the radius squared."""
@@ -120,14 +120,14 @@ class _Vector(object):
     def rho(self):
         """Compute the radius."""
 
-        return jax.numpy.sqrt(self.space().square())
+        return jnp.sqrt(self.space().square())
 
     def space_direction(self):
         """Compute the corresponding unit vector in ordinary space."""
         return self.space() / self.rho()
 
     def phi(self):
-        return np.arctan2(self[2], self[1])
+        return jnp.arctan2(self[2], self[1])
 
     def boost(self, boost_vector, gamma=-1.0):
         """Transport self into the rest frame of the boost_vector in argument.
@@ -139,10 +139,10 @@ class _Vector(object):
         b2 = boost_vector.square()
 
         if gamma < 0.0:
-            gamma = 1.0 / jax.numpy.sqrt(1.0 - b2)
+            gamma = 1.0 / jnp.sqrt(1.0 - b2)
 
         bp = self.space().vector.dot(boost_vector.vector)
-        gamma2 = jax.numpy.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
+        gamma2 = jnp.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
         factor = gamma2 * bp + gamma * self[0]
         # self.space().vector += factor*boost_vector.vector
         self[1:] += factor * boost_vector.vector
@@ -160,7 +160,7 @@ class _Vector(object):
         return self[3] / ptot
 
 
-class Vector(np.ndarray):
+class Vector(jnp.ndarray):
     def __new__(cls, *args, **opts):
         if args and isinstance(args[0], Vector):
             vec = args[0]
