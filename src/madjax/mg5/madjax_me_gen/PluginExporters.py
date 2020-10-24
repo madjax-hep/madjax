@@ -581,9 +581,11 @@ class PluginProcessExporterPython(object):
         # Automatically add this output to the python path import system
         open(pjoin(self.export_dir, '__init__.py'), 'w').write(
             """import sys
-import os
-root_path = os.path.dirname(os.path.realpath( __file__ ))
-sys.path.insert(0, root_path)
+from pathlib import Path
+
+_mg5_aMC_output_path = str(Path(__file__).resolve().parents[0])
+if _mg5_aMC_output_path not in sys.path:
+    sys.path.append(_mg5_aMC_output_path)
 """
         )
 
