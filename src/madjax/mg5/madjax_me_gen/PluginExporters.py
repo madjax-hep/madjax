@@ -152,7 +152,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                     param.lhacode[0],
                     param.lhacode[1],
                 )
-                expression += "%s = slha.get((\"%s\", indices), %e);" % (
+                expression += "{} = slha.get((\"{}\", indices), {:e});".format(
                     param.name,
                     param.lhablock.lower(),
                     param.value.real,
@@ -299,7 +299,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
 
         res_strings = []
         for param in params:
-            res_strings.append("%s%s" % (' ' * indent, param.expr))
+            res_strings.append("{}{}".format(' ' * indent, param.expr))
 
         # Correct width sign for Majorana particles (where the width
         # and mass need to have the same sign)
@@ -310,7 +310,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                 and particle.get('width').lower() != 'zero'
             ):
                 res_strings.append(
-                    "%sif (%s < 0)" % (' ' * indent, particle.get('mass'))
+                    "{}if ({} < 0)".format(' ' * indent, particle.get('mass'))
                 )
                 res_strings.append(
                     "%(indent)s%(width)s = -abs(%(width)s)"
@@ -386,7 +386,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
     def read_template_file(cls, filename, classpath=False):
         """Open a template file and return the contents."""
 
-        return open(pjoin(plugin_path, 'templates', filename), 'r').read()
+        return open(pjoin(plugin_path, 'templates', filename)).read()
 
 
 class ProcessOutputPython(export_v4.ProcessExporterFortranSA):
@@ -508,7 +508,7 @@ class PythonMEExporter(export_python.ProcessExporterPython):
             else:
                 final_masses.append(self.model.get_particle(leg.get('id')).get('mass'))
 
-        return '( (%s), (%s) )' % (
+        return '( ({}), ({}) )'.format(
             ', '.join('params["%s"]' % mass for mass in initial_masses),
             ', '.join('params["%s"]' % mass for mass in final_masses),
         )
@@ -540,15 +540,13 @@ class PythonMEExporter(export_python.ProcessExporterPython):
         # Get all couplings used
 
         couplings = list(
-            set(
-                [
-                    c.replace('-', '')
-                    for func in matrix_element.get_all_wavefunctions()
-                    + matrix_element.get_all_amplitudes()
-                    for c in func.get('coupling')
-                    if func.get('mothers')
-                ]
-            )
+            {
+                c.replace('-', '')
+                for func in matrix_element.get_all_wavefunctions()
+                + matrix_element.get_all_amplitudes()
+                for c in func.get('coupling')
+                if func.get('mothers')
+            }
         )
 
         # return "\n        ".join([\
@@ -561,18 +559,18 @@ class PythonMEExporter(export_python.ProcessExporterPython):
         return (
             "\n        ".join(
                 [
-                    '%(param)s = model["%(param)s"]' % {"param": param}
+                    '{param} = model["{param}"]'.format(param=param)
                     for param in parameters
                 ]
             )
             + "\n        "
             + "\n        ".join(
-                ['%(coup)s = model["%(coup)s"]' % {"coup": coup} for coup in couplings]
+                ['{coup} = model["{coup}"]'.format(coup=coup) for coup in couplings]
             )
         )
 
 
-class PluginProcessExporterPython(object):
+class PluginProcessExporterPython:
 
     exporter = 'v4'
     grouped_mode = False

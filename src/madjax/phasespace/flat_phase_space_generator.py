@@ -15,7 +15,7 @@ class PhaseSpaceGeneratorError(RuntimeError):
 logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
 
-class Dimension(object):
+class Dimension:
     """ A dimension object specifying a specific integration dimension."""
 
     def __init__(self, name, folded=False):
@@ -37,7 +37,7 @@ class DiscreteDimension(Dimension):
             self.normalized = opts.pop("normalized")
         except:
             self.normalized = False
-        super(DiscreteDimension, self).__init__(name, **opts)
+        super().__init__(name, **opts)
         assert isinstance(values, list)
         self.values = values
 
@@ -55,7 +55,7 @@ class ContinuousDimension(Dimension):
     """ A dimension object specifying a specific discrete integration dimension."""
 
     def __init__(self, name, lower_bound=0.0, upper_bound=1.0, **opts):
-        super(ContinuousDimension, self).__init__(name, **opts)
+        super().__init__(name, **opts)
         assert upper_bound > lower_bound
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
@@ -73,7 +73,7 @@ class DimensionList(list):
     """A DimensionList."""
 
     def __init__(self, *args, **opts):
-        super(DimensionList, self).__init__(*args, **opts)
+        super().__init__(*args, **opts)
 
     def volume(self):
         """ Returns the volue of the complete list of dimensions."""
@@ -85,7 +85,7 @@ class DimensionList(list):
     def append(self, arg, **opts):
         """ Type-checking. """
         assert isinstance(arg, Dimension)
-        super(DimensionList, self).append(arg, **opts)
+        super().append(arg, **opts)
 
     def get_discrete_dimensions(self):
         """ Access all discrete dimensions. """
@@ -104,7 +104,7 @@ class DimensionList(list):
 # =========================================================================================
 
 
-class VirtualPhaseSpaceGenerator(object):
+class VirtualPhaseSpaceGenerator:
     def __init__(
         self,
         initial_masses,
@@ -135,12 +135,10 @@ class VirtualPhaseSpaceGenerator(object):
         self.dimensions = self.get_dimensions()
         self.dim_ordered_names = [d.name for d in self.dimensions]
 
-        self.dim_name_to_position = dict(
-            (d.name, i) for i, d in enumerate(self.dimensions)
-        )
-        self.position_to_dim_name = dict(
-            (v, k) for (k, v) in self.dim_name_to_position.items()
-        )
+        self.dim_name_to_position = {d.name: i for i, d in enumerate(self.dimensions)}
+        self.position_to_dim_name = {
+            v: k for (k, v) in self.dim_name_to_position.items()
+        }
 
     def generateKinematics(self, E_cm, random_variables):
         """Generate a phase-space point with fixed center of mass energy."""
@@ -246,7 +244,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
     }
 
     def __init__(self, *args, **opts):
-        super(FlatInvertiblePhasespace, self).__init__(*args, **opts)
+        super().__init__(*args, **opts)
         if self.n_initial == 1:
             raise InvalidCmd("This basic generator does not support decay topologies.")
 
@@ -267,7 +265,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 "This basic generator only supports colliders with incoming beams equally energetic."
             )
 
-        return super(FlatInvertiblePhasespace, self).get_dimensions()
+        return super().get_dimensions()
 
     @staticmethod
     def get_flatWeights(E_cm, n, mass=None):
@@ -510,7 +508,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         try:
             assert len(random_variables) == self.nDimPhaseSpace()
         except:
-            raise RuntimeError('need {} random variables'.format(self.nDimPhaseSpace()))
+            raise RuntimeError(f'need {self.nDimPhaseSpace()} random variables')
 
         # Make sure that none of the random_variables is NaN.
         # Lukas: not part of computation ignore for now
@@ -779,9 +777,9 @@ if __name__ == "__main__":
         )
     print("Rel. diff. in PS weight = %.3e\n" % ((wgt_reconstructed - wgt) / wgt))
 
-    print(("-" * 100))
-    print(("SIDE EXPERIMENT, TO REMOVE LATER"))
-    print(("-" * 100))
+    print("-" * 100)
+    print("SIDE EXPERIMENT, TO REMOVE LATER")
+    print("-" * 100)
     import copy
 
     my_PS_generator = FlatInvertiblePhasespace(

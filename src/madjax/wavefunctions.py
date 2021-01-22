@@ -1,4 +1,3 @@
-from __future__ import division
 from madjax.madjax_patch import sqrt, complex, max, min
 from itertools import product
 

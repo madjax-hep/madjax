@@ -34,7 +34,7 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
     We make it inherit from CmdShell so that launch_ext_prog does not attempt to start in WebMode."""
 
     def __init__(self, *args, **opts):
-        super(MG5aMC_PythonMEsInterface, self).__init__(*args, **opts)
+        super().__init__(*args, **opts)
         self.plugin_output_format_selected = None
 
     def do_output(self, line):
@@ -48,11 +48,11 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
             self.plugin_output_format_selected = 'madjax'
             self.do_output_PythonMEs(' '.join(args[1:]))
         else:
-            super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(args))
+            super().do_output(' '.join(args))
 
     def do_output_PythonMEs(self, line):
         args = self.split_arg(line)
-        super(MG5aMC_PythonMEsInterface, self).do_output(' '.join(['madjax'] + args))
+        super().do_output(' '.join(['madjax'] + args))
 
     def export(self, *args, **opts):
         """Overwrite this so as to force a pythia8 type of output if the output mode is PY8MEs."""
@@ -70,12 +70,12 @@ class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):
                     "A plugin output format must have been specified at this stage."
                 )
 
-        super(MG5aMC_PythonMEsInterface, self).export(*args, **opts)
+        super().export(*args, **opts)
 
     # command to change the prompt
     def preloop(self, *args, **opts):
         """only change the prompt after calling  the mother preloop command"""
-        super(MG5aMC_PythonMEsInterface, self).preloop(*args, **opts)
+        super().preloop(*args, **opts)
         # The colored prompt screws up the terminal for some reason.
         # self.prompt = '\033[92mPY8Kernels > \033[0m'
         self.prompt = 'MG5aMC_PythonMEs > '

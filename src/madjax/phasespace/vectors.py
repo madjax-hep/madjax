@@ -27,7 +27,7 @@ def vectorized_cond(pred, true_fun, false_fun, operand):
   return np.where(pred, true_fun(true_op), false_fun(false_op))
 
 
-class _Vector3(object):
+class _Vector3:
     def __init__(self, vec):
         self.vector = np.asarray(vec)
 
@@ -53,7 +53,7 @@ class _Vector3(object):
         return self.vector
 
 
-class _Vector(object):
+class _Vector:
     def __init__(self, vec):
         self.vector = np.asarray(vec)
 
@@ -184,5 +184,5 @@ class Vector(np.ndarray):
 class LorentzVector(Vector):
     def __new__(cls, *args, **opts):
         if len(args) == 0:
-            return super(LorentzVector, cls).__new__(cls, [0.0, 0.0, 0.0, 0.0], **opts)
-        return super(LorentzVector, cls).__new__(cls, *args, **opts)
+            return super().__new__(cls, [0.0, 0.0, 0.0, 0.0], **opts)
+        return super().__new__(cls, *args, **opts)

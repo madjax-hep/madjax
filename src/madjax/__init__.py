@@ -4,14 +4,12 @@ import importlib
 from madjax.phasespace.flat_phase_space_generator import FlatInvertiblePhasespace
 
 
-class MadJax(object):
+class MadJax:
     def __init__(self, config_name):
         all_processes = importlib.import_module(
-            '{}.processes.all_processes'.format(config_name)
+            f'{config_name}.processes.all_processes'
         )
-        self.parameters = importlib.import_module(
-            '{}.model.parameters'.format(config_name)
-        )
+        self.parameters = importlib.import_module(f'{config_name}.model.parameters')
         self.processes = {
             k: v for k, v in all_processes.__dict__.items() if 'Matrix_' in k
         }
