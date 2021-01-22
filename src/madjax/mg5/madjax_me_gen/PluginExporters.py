@@ -371,7 +371,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         aloha_output.write('from madjax.madjax_patch import complex\n')
         aloha_output.write('from jax.numpy import where\n')
         # Write imports
-        ###aloha_output.write('\n'.join(python_imports))
+        # aloha_output.write('\n'.join(python_imports))
         aloha_output.write('\n' * 2)
 
         # Write routines
@@ -650,8 +650,8 @@ sys.path.insert(0, root_path)
             all_processes.write(val)
             all_processes.write('\n')
 
-        ###all_processes.write('\n'.join(matrix_methods.values()))
-        ###all_processes.write('\n')
+        # all_processes.write('\n'.join(matrix_methods.values()))
+        # all_processes.write('\n')
         all_processes.close()
 
         # for key, method in matrix_methods.items():

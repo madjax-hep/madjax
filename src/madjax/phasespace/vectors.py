@@ -106,8 +106,8 @@ class _Vector:
 
     def dot(self, v, out=None):
         """Compute the Lorentz scalar product."""
-        ## The implementation below allows for a check but it should be done upstream and
-        ## significantly slows down the code here.
+        # The implementation below allows for a check but it should be done upstream and
+        # significantly slows down the code here.
         # pos = self[0]*v[0]
         # neg = self.space().dot(v.space())
         # if pos+neg != 0 and abs(2*(pos-neg)/(pos+neg)) < 100.*self.eps(): return 0
