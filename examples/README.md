@@ -22,7 +22,7 @@ docker run --rm -it -v `madjax-config`:/code/madgraph/PLUGIN/madjax_me_gen -v $P
 * .. or using a local install of MadGraph (might require its own python env)
 
 ```
-tar -xzvf MG5_aMC_v2.7.0.tar.gz 
+tar -xzvf MG5_aMC_v2.7.0.tar.gz
 ln -s $(madjax-config) MG5_aMC_v2_7_0/PLUGIN/
 # in a python 2.7 shell
 PYTHONPATH=/path/to/MG5_aMC_v2_7_0/PLUGIN /path/to/MG5_aMC_v2_7_0/bin/mg5_aMC --mode=madjax_me_gen higgs.mg5
