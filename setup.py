@@ -7,29 +7,25 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as readme_md
     long_description = readme_md.read()
 
 extras_require = {}
-extras_require["lint"] = sorted(set(["pyflakes", "black"]))
+extras_require["lint"] = sorted({"pyflakes", "black"})
 extras_require["test"] = sorted(
-    set(
-        [
-            "pytest~=3.5",
-            "pydocstyle",
-            "papermill~=1.0",
-        ]
-    )
+    {
+        "pytest~=3.5",
+        "pydocstyle",
+        "papermill~=1.0",
+    }
 )
 extras_require["docs"] = sorted(
-    set(
-        [
-            "sphinx",
-            "sphinxcontrib-bibtex",
-            "sphinx-click",
-            "sphinx_rtd_theme",
-            "nbsphinx",
-            "ipywidgets",
-            "sphinx-issues",
-            "m2r",
-        ]
-    )
+    {
+        "sphinx",
+        "sphinxcontrib-bibtex",
+        "sphinx-click",
+        "sphinx_rtd_theme",
+        "nbsphinx",
+        "ipywidgets",
+        "sphinx-issues",
+        "m2r",
+    }
 )
 extras_require["develop"] = sorted(
     set(
