@@ -16,8 +16,8 @@ class MadJax(object):
             k: v for k, v in all_processes.__dict__.items() if 'Matrix_' in k
         }
 
-    def phasespapce_generator(self, E_cm, process_name):
-        def func(external_parameters, random_variables):
+    def phasespace_generator(self, E_cm, process_name):
+        def func(external_parameters):
             parameters = self.parameters.calculate_full_parameters(external_parameters)
             process = self.processes[process_name]()
             external_masses = process.get_external_masses(parameters)
@@ -36,19 +36,27 @@ class MadJax(object):
 
     
     def jacobian(self, E_cm, process_name, do_jit=True):
-        ps = self.phasespapce_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm,process_name)
         def func(external_parameters, random_variables):
-            ps_generator = ps(external_parameters, random_variables)
+            ps_generator = ps(external_parameters)
             PS_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
             return jacobian
         return jax.jit(func) if do_jit else func
 
 
+    def phasespace_vectors(self, E_cm, process_name):
+        ps = self.phasespace_generator(E_cm,process_name)
+        def func(external_parameters, random_variables):
+            ps_generator = ps(external_parameters)
+            ps_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
+            return jax.numpy.array([v.vector for v in ps_point])
+        return func
+
     def matrix_element(self, E_cm, process_name, return_grad=True, do_jit=True):
-        ps = self.phasespapce_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm,process_name)
         def func(external_parameters, random_variables):
             parameters = self.parameters.calculate_full_parameters(external_parameters)
-            ps_generator = ps(external_parameters, random_variables)
+            ps_generator = ps(external_parameters)
             ps_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
             process = self.processes[process_name]()
             return process.smatrix(ps_point, parameters)
