@@ -1,0 +1,7 @@
+define udsc=u d s c
+define udscx=u~ d~ s~ c~
+define v = a z
+generate p p > t t~, t > b udsc udscx , t~ > b~ udsc udscx 
+!rm -rf ttbar_bqq_bqq
+output madjax  ttbar_bqq_bqq
+set auto_update 0 

@@ -20,6 +20,12 @@ import jax
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
+def vectorized_cond(pred, true_fun, false_fun, operand):
+  # true_fun and false_fun must act elementwise (i.e. be vectorized)
+  true_op = np.where(pred, operand, 0)
+  false_op = np.where(pred, 0, operand)
+  return np.where(pred, true_fun(true_op), false_fun(false_op))
+
 
 class _Vector3(object):
     def __init__(self, vec):
@@ -142,7 +148,10 @@ class _Vector(object):
             gamma = 1.0 / jax.numpy.sqrt(1.0 - b2)
 
         bp = self.space().vector.dot(boost_vector.vector)
-        gamma2 = jax.numpy.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
+
+
+        gamma2 = vectorized_cond(b2 > 0, lambda x:( (gamma - 1.0) / x ), lambda x: 0.0, b2)
+        #gamma2 = jax.numpy.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
         factor = gamma2 * bp + gamma * self[0]
         # self.space().vector += factor*boost_vector.vector
         self[1:] += factor * boost_vector.vector

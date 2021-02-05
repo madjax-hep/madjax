@@ -3,11 +3,11 @@ from jax.numpy import sqrt
 
 
 def max(a, b):
-    return jax.numpy.max([a, b])
+    return jax.numpy.max(jax.numpy.array([a, b]))
 
 
 def min(a, b):
-    return jax.numpy.min([a, b])
+    return jax.numpy.min(jax.numpy.array([a, b]))
 
 
 from jax.numpy import power as pow
