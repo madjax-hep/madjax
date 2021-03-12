@@ -109,10 +109,8 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         the two lists params_indep and params_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        keys = self.model['parameters'].keys()
-        keys.sort(key=len)
         params_ext = []
-        for key in keys:
+        for key in sorted(self.model["parameters"]):
             if key == ('external',):
                 params_ext += [p for p in self.model['parameters'][key] if p.name]
             elif 'aS' in key:
@@ -166,8 +164,6 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         the two lists coups_indep and coups_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        keys = self.model['couplings'].keys()
-        keys.sort(key=len)
         for key, coup_list in self.model['couplings'].items():
             if "aS" in key:
                 for c in coup_list:
@@ -183,7 +179,7 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
                         )
 
         # Convert coupling expressions from Python to C++
-        for coup in self.coups_dep.values() + self.coups_indep:
+        for coup in list(self.coups_dep.values()) + self.coups_indep:
             coup.expr = coup.name + " = " + coup.expr
 
     # Routines for writing the parameter files
@@ -585,9 +581,11 @@ class PluginProcessExporterPython(object):
         # Automatically add this output to the python path import system
         open(pjoin(self.export_dir, '__init__.py'), 'w').write(
             """import sys
-import os
-root_path = os.path.dirname(os.path.realpath( __file__ ))
-sys.path.insert(0, root_path)
+from pathlib import Path
+
+_mg5_aMC_output_path = str(Path(__file__).resolve().parents[0])
+if _mg5_aMC_output_path not in sys.path:
+    sys.path.append(_mg5_aMC_output_path)
 """
         )
 

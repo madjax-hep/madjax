@@ -2,15 +2,15 @@ import sys
 import madjax
 
 mj = madjax.MadJax(config_name=sys.argv[1])
-for k, process_class in mj.processes.items():
-    print(">>> Running process ", k)
+for process, process_class in mj.processes.items():
+    print(f">>> Running process {process}")
 
     # Generate some random variables
     nDimPhaseSpace = 2
-    random_variables = [0.2] * 8
+    random_variables = [0.2] * nDimPhaseSpace
 
     # Center of mass of the collision in GeV
-    matrix_element = mj.matrix_element(E_cm=125.0, process_name=k)
+    matrix_element = mj.matrix_element(E_cm=125.0, process_name=process)
 
     v, p = matrix_element(
         {
@@ -20,5 +20,5 @@ for k, process_class in mj.processes.items():
         },
         random_variables,
     )
-    print("ME:", v)
-    print("ME prime:", p)
+    print(f"ME: {v}")
+    print(f"ME prime: {p}")
