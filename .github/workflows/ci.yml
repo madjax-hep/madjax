@@ -13,20 +13,15 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     container:
-      # image: scailfin/madgraph5-amc-nlo:mg5_amc2.9.2
-      image: ubuntu:20.04
-      options: --user root
+      image: scailfin/madgraph5-amc-nlo:mg5_amc2.9.2
+      # image: ubuntu:20.04
+      # options: --user root
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
