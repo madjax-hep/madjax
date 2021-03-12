@@ -12,18 +12,15 @@ jobs:
   test:
 
     runs-on: ${{ matrix.os }}
-    container: scailfin/madgraph5-amc-nlo:mg5_amc2.8.1
+    container:
+      image: scailfin/madgraph5-amc-nlo:mg5_amc2.9.2
+      options: --user root
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
@@ -34,6 +31,6 @@ jobs:
         python -m pytest -r sx
     - name: Test matrix element generation
       run: |
-        cp -r $(madjax-config) /usr/local/MG5_aMC_v2_8_1/PLUGIN/
+        cp -r $(madjax-config) /usr/local/MG5_aMC/PLUGIN/
         mg5_aMC --mode=madjax_me_gen examples/ee_to_mumuj.mg5
         ls -lhtra ee_to_mumuj_output/
