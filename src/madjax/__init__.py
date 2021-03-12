@@ -30,28 +30,32 @@ class MadJax:
             assert E_cm > sum(external_masses[1]) * 2.0
 
             return ps_generator
+
         return func
 
-    
     def jacobian(self, E_cm, process_name, do_jit=True):
-        ps = self.phasespace_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm, process_name)
+
         def func(external_parameters, random_variables):
             ps_generator = ps(external_parameters)
             PS_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
             return jacobian
+
         return jax.jit(func) if do_jit else func
 
-
     def phasespace_vectors(self, E_cm, process_name):
-        ps = self.phasespace_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm, process_name)
+
         def func(external_parameters, random_variables):
             ps_generator = ps(external_parameters)
             ps_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
             return jax.numpy.array([v.vector for v in ps_point])
+
         return func
 
     def matrix_element(self, E_cm, process_name, return_grad=True, do_jit=True):
-        ps = self.phasespace_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm, process_name)
+
         def func(external_parameters, random_variables):
             parameters = self.parameters.calculate_full_parameters(external_parameters)
             ps_generator = ps(external_parameters)
@@ -60,7 +64,11 @@ class MadJax:
             return process.smatrix(ps_point, parameters)
 
         if return_grad:
-            return jax.jit(jax.value_and_grad(func)) if do_jit else jax.value_and_grad(func)
+            return (
+                jax.jit(jax.value_and_grad(func))
+                if do_jit
+                else jax.value_and_grad(func)
+            )
         else:
             return jax.jit(func) if do_jit else func
 

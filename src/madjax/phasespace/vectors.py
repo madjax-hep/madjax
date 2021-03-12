@@ -20,11 +20,12 @@ import jax
 
 logger = logging.getLogger("madgraph.PhaseSpaceGenerator")
 
+
 def vectorized_cond(pred, true_fun, false_fun, operand):
-  # true_fun and false_fun must act elementwise (i.e. be vectorized)
-  true_op = np.where(pred, operand, 0)
-  false_op = np.where(pred, 0, operand)
-  return np.where(pred, true_fun(true_op), false_fun(false_op))
+    # true_fun and false_fun must act elementwise (i.e. be vectorized)
+    true_op = np.where(pred, operand, 0)
+    false_op = np.where(pred, 0, operand)
+    return np.where(pred, true_fun(true_op), false_fun(false_op))
 
 
 class _Vector3:
@@ -149,9 +150,10 @@ class _Vector:
 
         bp = self.space().vector.dot(boost_vector.vector)
 
-
-        #gamma2 = vectorized_cond(b2 > 0., lambda x:( (gamma - 1.0) / jnp.where(x>0. , x, 1.) ), lambda x: 0., b2)
-        gamma2 = jax.numpy.where(b2 > 0. , ((gamma - 1.0) / jax.numpy.where(b2>0., b2, 1.)), 0.0)
+        # gamma2 = vectorized_cond(b2 > 0., lambda x:( (gamma - 1.0) / jnp.where(x>0. , x, 1.) ), lambda x: 0., b2)
+        gamma2 = jax.numpy.where(
+            b2 > 0.0, ((gamma - 1.0) / jax.numpy.where(b2 > 0.0, b2, 1.0)), 0.0
+        )
         factor = gamma2 * bp + gamma * self[0]
         # self.space().vector += factor*boost_vector.vector
         self[1:] += factor * boost_vector.vector
@@ -165,7 +167,7 @@ class _Vector:
 
     def cosTheta(self):
         ptot = self.rho()
-        #assert ptot > 0.0
+        # assert ptot > 0.0
         return self[3] / ptot
 
 

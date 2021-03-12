@@ -25,16 +25,20 @@ from jax import lax
 
 _nofun = lambda x: x
 
+
 def _lax_cond_nofun(pred, true_operand, false_operand):
     return lax.cond(pred, true_operand, _nofun, false_operand, _nofun)
 
+
 def _lax_cond_unpack(pred, true_operand, true_fun, false_operand, false_fun):
-    return lax.cond(pred,
-                        true_operand,
-                        lambda x: true_fun(*x),
-                        false_operand,
-                        lambda x: false_fun(*x)
-                        )
+    return lax.cond(
+        pred,
+        true_operand,
+        lambda x: true_fun(*x),
+        false_operand,
+        lambda x: false_fun(*x),
+    )
+
 
 def WaveFunction(spin=None, size=None):
     spin_to_size = {0: 1, 1: 3, 2: 6, 3: 6, 4: 18, 5: 18}
@@ -65,7 +69,9 @@ def ixxxxx(p, fmass, nhel, nsf):
         fi5 = im * _lax_cond_nofun(im == 0, sqm_0, sqm_1)
 
         # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)]))
+        return np.squeeze(
+            np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)])
+        )
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -96,7 +102,9 @@ def ixxxxx(p, fmass, nhel, nsf):
         fi5 = sfomeg_1 * _lax_cond_nofun(ip == 0, chi0, chi1)
 
         # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)]))
+        return np.squeeze(
+            np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)])
+        )
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
@@ -106,7 +114,7 @@ def ixxxxx(p, fmass, nhel, nsf):
             (p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_zero,
             (p, fmass, nhel, nsf, nh, pp),
-            fmass_nonzero_pp_nonzero
+            fmass_nonzero_pp_nonzero,
         )
 
         # print("fmass!= 0.", fi2345)
@@ -148,7 +156,7 @@ def ixxxxx(p, fmass, nhel, nsf):
         (p.asarray(), fmass, nhel, nsf, nh),
         fmass_nonzero,
         (p.asarray(), fmass, nhel, nsf, nh),
-        fmass_zero
+        fmass_zero,
     )
 
     # print("final fi2345", fi2345)
@@ -323,7 +331,9 @@ def oxxxxx(p, fmass, nhel, nsf):
         fo5 = ip * _lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
 
         # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)]))
+        return np.squeeze(
+            np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)])
+        )
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -343,7 +353,7 @@ def oxxxxx(p, fmass, nhel, nsf):
         chi1 = _lax_cond_nofun(
             pp3 == 0.0,
             complex(-1.0 * nh, 0.0),
-            complex(nh * p[1] / sqrt(2.0 * pp * pp3), -p[2] / sqrt(2.0 * pp * pp3))
+            complex(nh * p[1] / sqrt(2.0 * pp * pp3), -p[2] / sqrt(2.0 * pp * pp3)),
         )
         chi0 = complex(sqrt(pp3 * 0.5 / pp), 0.0)
 
@@ -353,7 +363,9 @@ def oxxxxx(p, fmass, nhel, nsf):
         fo5 = sfomeg_0 * _lax_cond_nofun(ip == 0, chi0, chi1)
 
         # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)]))
+        return np.squeeze(
+            np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)])
+        )
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
@@ -363,7 +375,7 @@ def oxxxxx(p, fmass, nhel, nsf):
             (p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_zero,
             (p, fmass, nhel, nsf, nh, pp),
-            fmass_nonzero_pp_nonzero
+            fmass_nonzero_pp_nonzero,
         )
 
         # print("fmass!= 0.", fo2345)
@@ -405,7 +417,7 @@ def oxxxxx(p, fmass, nhel, nsf):
         (p.asarray(), fmass, nhel, nsf, nh),
         fmass_nonzero,
         (p.asarray(), fmass, nhel, nsf, nh),
-        fmass_zero
+        fmass_zero,
     )
 
     # print("final fo2345", fo2345)
@@ -570,22 +582,22 @@ def vxxxxx(p, vmass, nhel, nsv):
 
     # if False:
     def nhel_4_vmass_zero(p):
-        vc2 = complex( 1.0, 0.0)
-        vc3 = complex( p[1] / p[0], 0.0)
-        vc4 = complex( p[2] / p[0], 0.0)
-        vc5 = complex( p[2] / p[0], 0.0)
+        vc2 = complex(1.0, 0.0)
+        vc3 = complex(p[1] / p[0], 0.0)
+        vc4 = complex(p[2] / p[0], 0.0)
+        vc5 = complex(p[2] / p[0], 0.0)
         return np.array([vc2, vc3, vc4, vc5])
 
     def nhel_4_vmass_nonzero(p, vmass):
-        vc2 = complex( p[0] / vmass, 0.0)
-        vc3 = complex( p[1] / vmass, 0.0)
-        vc4 = complex( p[2] / vmass, 0.0)
-        vc5 = complex( p[3] / vmass, 0.0)
+        vc2 = complex(p[0] / vmass, 0.0)
+        vc3 = complex(p[1] / vmass, 0.0)
+        vc4 = complex(p[2] / vmass, 0.0)
+        vc5 = complex(p[3] / vmass, 0.0)
         return np.array([vc2, vc3, vc4, vc5])
 
     def nhel_4(p, vmass):
         vc2345 = _lax_cond_nofun(
-            vmass == 0.0, nhel_4_vmass_zero(p),  nhel_4_vmass_nonzero(p, vmass)
+            vmass == 0.0, nhel_4_vmass_zero(p), nhel_4_vmass_nonzero(p, vmass)
         )
         return vc2345
 
@@ -629,7 +641,7 @@ def vxxxxx(p, vmass, nhel, nsv):
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0, emp),
             nhel_not4_vmass_nonzero_pp_nonzero_pt_nonzero,
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0, emp),
-            nhel_not4_vmass_nonzero_pp_nonzero_pt_zero
+            nhel_not4_vmass_nonzero_pp_nonzero_pt_zero,
         )
 
         return vc2345
@@ -639,10 +651,10 @@ def vxxxxx(p, vmass, nhel, nsv):
 
         vc2345 = _lax_cond_unpack(
             pp == 0.0,
-            ( p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0),
+            (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0),
             nhel_not4_vmass_nonzero_pp_zero,
-            ( p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0),
-            nhel_not4_vmass_nonzero_pp_nonzero
+            (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt, hel0),
+            nhel_not4_vmass_nonzero_pp_nonzero,
         )
 
         return vc2345
@@ -675,7 +687,7 @@ def vxxxxx(p, vmass, nhel, nsv):
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
             nhel_not4_vmass_zero_pt_nonzero,
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
-            nhel_not4_vmass_zero_pt_zero
+            nhel_not4_vmass_zero_pt_zero,
         )
 
         return vc2345
@@ -686,7 +698,7 @@ def vxxxxx(p, vmass, nhel, nsv):
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
             nhel_not4_vmass_nonzero,
             (p, vmass, nhel, nsv, sqh, nsvahl, pp, pt),
-            nhel_not4_vmass_zero
+            nhel_not4_vmass_zero,
         )
 
         return vc2345
@@ -696,7 +708,7 @@ def vxxxxx(p, vmass, nhel, nsv):
         (p.asarray(), vmass),
         nhel_4,
         (p.asarray(), vmass, nhel, nsv, sqh, nsvahl, pp, pt),
-        nhel_not4
+        nhel_not4,
     )
 
     vc[2] = vc2345[0]
