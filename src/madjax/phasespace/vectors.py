@@ -165,7 +165,7 @@ class _Vector(object):
 
     def cosTheta(self):
         ptot = self.rho()
-        assert ptot > 0.0
+        #assert ptot > 0.0
         return self[3] / ptot
 
 
