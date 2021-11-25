@@ -150,8 +150,8 @@ class _Vector(object):
         bp = self.space().vector.dot(boost_vector.vector)
 
 
-        gamma2 = vectorized_cond(b2 > 0, lambda x:( (gamma - 1.0) / x ), lambda x: 0.0, b2)
-        #gamma2 = jax.numpy.where(b2 > 0, (gamma - 1.0) / b2, 0.0)
+        #gamma2 = vectorized_cond(b2 > 0., lambda x:( (gamma - 1.0) / jnp.where(x>0. , x, 1.) ), lambda x: 0., b2)
+        gamma2 = jax.numpy.where(b2 > 0. , ((gamma - 1.0) / jax.numpy.where(b2>0., b2, 1.)), 0.0)
         factor = gamma2 * bp + gamma * self[0]
         # self.space().vector += factor*boost_vector.vector
         self[1:] += factor * boost_vector.vector

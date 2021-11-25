@@ -644,7 +644,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         # Make sure the right number of momenta are passed
         assert len(momenta) == (self.n_initial + self.n_final)
-        moms = momenta.copy()
+        moms = momenta[:]
 
         # The weight of the corresponding PS point
         weight = 1.0

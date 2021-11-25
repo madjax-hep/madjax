@@ -65,3 +65,15 @@ class MadJax(object):
             return jax.jit(jax.value_and_grad(func)) if do_jit else jax.value_and_grad(func)
         else:
             return jax.jit(func) if do_jit else func
+
+
+    def matrix_element_and_jacobian(self, E_cm, process_name):
+        ps = self.phasespace_generator(E_cm,process_name)
+        def func(external_parameters, random_variables):
+            parameters = self.parameters.calculate_full_parameters(external_parameters)
+            ps_generator = ps(external_parameters)
+            ps_point, jacobian = ps_generator.generateKinematics(E_cm, random_variables)
+            process = self.processes[process_name]()
+            return process.smatrix(ps_point, parameters), jacobian
+
+        return func
