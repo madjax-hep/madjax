@@ -1,15 +1,15 @@
 # `madjax` - differentiable HEP Matrix Elements
 
 One of the most important quantities in HEP are the gradients of the
-probabilties of a given particle collision final state ("Matrix Elments") 
+probabilties of a given particle collision final state ("Matrix Elments")
 with respect to theory parameters or phase-space coordinates.
 
-The `madjax` package aims to provide these in an easy to use python-focused 
+The `madjax` package aims to provide these in an easy to use python-focused
 framework through the use of the automatic differrention `jax` and by integrating
 with the Matrix Element Calculator `MadGraph`. It consists of two modules
 
 * a `Madgraph` plugin to generate differentiable code
-* a python module `madjax` that provides an easy to use interface 
+* a python module `madjax` that provides an easy to use interface
 
 ## Installation
 
@@ -30,4 +30,3 @@ but it's also possible to use `madjax` with a local `MadGraph` install.
 
 
 ## Usage
-
