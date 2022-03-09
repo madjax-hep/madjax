@@ -644,7 +644,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
 
         # Make sure the right number of momenta are passed
         assert len(momenta) == (self.n_initial + self.n_final)
-        moms = momenta.copy()
+        moms = momenta[:]
 
         # The weight of the corresponding PS point
         weight = 1.0
@@ -686,8 +686,9 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 p.cosTheta() + 1.0
             ) / 2.0
             phi = p.phi()
-            if phi < 0.0:
-                phi += 2.0 * math.pi
+            #if phi < 0.0:
+            #    phi += 2.0 * math.pi
+            phi = jax.numpy.where(phi<0, phi + 2.0*jax.numpy.pi, phi)
             random_variables[self.n_final - 1 + 2 * (i - self.n_initial)] = phi / (
                 2.0 * math.pi
             )
