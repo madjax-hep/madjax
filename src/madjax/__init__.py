@@ -72,9 +72,9 @@ class MadJax:
         else:
             return jax.jit(func) if do_jit else func
 
-
     def matrix_element_and_jacobian(self, E_cm, process_name):
-        ps = self.phasespace_generator(E_cm,process_name)
+        ps = self.phasespace_generator(E_cm, process_name)
+
         def func(external_parameters, random_variables):
             parameters = self.parameters.calculate_full_parameters(external_parameters)
             ps_generator = ps(external_parameters)

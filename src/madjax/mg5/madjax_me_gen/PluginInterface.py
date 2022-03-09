@@ -22,11 +22,11 @@ pjoin = os.path.join
 
 
 class MG5aMC_PythonMEsPluginInterfaceError(MadGraph5Error):
-    """ Error of the Exporter of the MG5aMC_PythonMEs interface. """
+    """Error of the Exporter of the MG5aMC_PythonMEs interface."""
 
 
 class MG5aMC_PythonMEsPluginInvalidCmd(InvalidCmd):
-    """ Invalid command issued to the MG5aMC_PythonMEs interface. """
+    """Invalid command issued to the MG5aMC_PythonMEs interface."""
 
 
 class MG5aMC_PythonMEsInterface(madgraph_interface.MadGraphCmd, cmd.CmdShell):

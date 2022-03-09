@@ -65,18 +65,18 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         wanted_couplings=[],
         replace_dict={},
     ):
-        """ initialization of the objects """
-        
+        """initialization of the objects"""
+
         self.model = model
         self.model_name = export_cpp.ProcessExporterCPP.get_model_name(model['name'])
         self.aloha_model = create_aloha.AbstractALOHAModel(self.model_name)
-        
+
         self.dir_path = output_path
         self.default_replace_dict = dict(replace_dict)
         # List of needed ALOHA routines
         self.wanted_lorentz = wanted_lorentz
         self.wanted_couplings = wanted_couplings
-        
+
         # For dependent couplings, only want to update the ones
         # actually used in each process. For other couplings and
         # parameters, just need a list of all.
@@ -85,11 +85,10 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         self.params_dep = []  # base_objects.ModelVariable
         self.params_indep = []  # base_objects.ModelVariable
         self.p_to_cpp = None
-        
+
         # Prepare parameters and couplings for writeout in C++
         self.prepare_parameters()
         self.prepare_couplings(wanted_couplings)
-        
 
     def write_files(self):
         """Create all necessary files"""
@@ -110,8 +109,8 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
         the two lists params_indep and params_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        #keys = self.model['parameters'].keys()
-        #keys.sort(key=len)
+        # keys = self.model['parameters'].keys()
+        # keys.sort(key=len)
         keys = sorted(self.model['parameters'].keys(), key=len)
         params_ext = []
         for key in keys:
@@ -162,15 +161,14 @@ class UFOModelConverterPython(export_cpp.UFOModelConverterCPP):
             self.params_indep.insert(
                 0, base_objects.ModelVariable(param.name, expression, 'real')
             )
-        
 
     def prepare_couplings(self, wanted_couplings=[]):
         """Extract the couplings from the model, and store them in
         the two lists coups_indep and coups_dep"""
 
         # Keep only dependences on alphaS, to save time in execution
-        #keys = self.model['couplings'].keys()
-        #keys.sort(key=len)
+        # keys = self.model['couplings'].keys()
+        # keys.sort(key=len)
         keys = sorted(self.model['couplings'].keys(), key=len)
         for key, coup_list in self.model['couplings'].items():
             if "aS" in key:
@@ -489,7 +487,7 @@ class PythonMEExporter(export_python.ProcessExporterPython):
         return self.matrix_methods
 
     def get_external_masses(self, matrix_element):
-        """ Return a tuple of the form (initial_masses, final_masses)."""
+        """Return a tuple of the form (initial_masses, final_masses)."""
 
         # ---------------------------
         # Changed to legs with decays

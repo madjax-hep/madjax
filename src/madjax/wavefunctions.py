@@ -169,6 +169,7 @@ def ixxxxx(p, fmass, nhel, nsf):
     # print("fi=", fi)
     return fi
 
+
 def ixxxxx_massless(p, fmass, nhel, nsf):
     """Defines an inflow fermion."""
 
@@ -209,7 +210,7 @@ def ixxxxx_massless(p, fmass, nhel, nsf):
         # print("fmass== 0.", fi2345)
         return np.squeeze(fi2345)
 
-    fi2345 =fmass_zero(p.asarray(), nhel, nsf, nh)
+    fi2345 = fmass_zero(p.asarray(), nhel, nsf, nh)
 
     # print("final fi2345", fi2345)
 
@@ -220,6 +221,7 @@ def ixxxxx_massless(p, fmass, nhel, nsf):
 
     # print("fi=", fi)
     return fi
+
 
 def ixxxxx_massive(p, fmass, nhel, nsf):
     """Defines an inflow fermion."""
@@ -240,13 +242,15 @@ def ixxxxx_massive(p, fmass, nhel, nsf):
         val1 = _lax_cond_nofun(ip == 0, sqm_0, sqm_1)
         val2 = _lax_cond_nofun(im == 0, sqm_0, sqm_1)
 
-        fi2 = ip * val1 #_lax_cond_nofun(ip == 0, sqm_0, sqm_1)
-        fi3 = im * nsf * val1 #_lax_cond_nofun(ip == 0, sqm_0, sqm_1)
-        fi4 = ip * nsf * val2 #_lax_cond_nofun(im == 0, sqm_0, sqm_1)
-        fi5 = im * val2 #_lax_cond_nofun(im == 0, sqm_0, sqm_1)
+        fi2 = ip * val1  # _lax_cond_nofun(ip == 0, sqm_0, sqm_1)
+        fi3 = im * nsf * val1  # _lax_cond_nofun(ip == 0, sqm_0, sqm_1)
+        fi4 = ip * nsf * val2  # _lax_cond_nofun(im == 0, sqm_0, sqm_1)
+        fi5 = im * val2  # _lax_cond_nofun(im == 0, sqm_0, sqm_1)
 
         # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)]))
+        return np.squeeze(
+            np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)])
+        )
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -273,14 +277,16 @@ def ixxxxx_massive(p, fmass, nhel, nsf):
 
         val1 = _lax_cond_nofun(im == 0, chi0, chi1)
         val2 = _lax_cond_nofun(ip == 0, chi0, chi1)
-        
-        fi2 = sfomeg_0 * val1 #_lax_cond_nofun(im == 0, chi0, chi1)
-        fi3 = sfomeg_0 * val2 #_lax_cond_nofun(ip == 0, chi0, chi1)
-        fi4 = sfomeg_1 * val1 #_lax_cond_nofun(im == 0, chi0, chi1)
-        fi5 = sfomeg_1 * val2 #_lax_cond_nofun(ip == 0, chi0, chi1)
+
+        fi2 = sfomeg_0 * val1  # _lax_cond_nofun(im == 0, chi0, chi1)
+        fi3 = sfomeg_0 * val2  # _lax_cond_nofun(ip == 0, chi0, chi1)
+        fi4 = sfomeg_1 * val1  # _lax_cond_nofun(im == 0, chi0, chi1)
+        fi5 = sfomeg_1 * val2  # _lax_cond_nofun(ip == 0, chi0, chi1)
 
         # print("pp!= 0.", np.squeeze(np.array([fi2, fi3, fi4, fi5])))
-        return np.squeeze(np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)]))
+        return np.squeeze(
+            np.array([complex(fi2), complex(fi3), complex(fi4), complex(fi5)])
+        )
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
@@ -290,12 +296,11 @@ def ixxxxx_massive(p, fmass, nhel, nsf):
             (p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_zero,
             (p, fmass, nhel, nsf, nh, pp),
-            fmass_nonzero_pp_nonzero
+            fmass_nonzero_pp_nonzero,
         )
 
         # print("fmass!= 0.", fi2345)
         return fi2345
-
 
     fi2345 = fmass_nonzero(p.asarray(), fmass, nhel, nsf, nh)
 
@@ -311,7 +316,7 @@ def ixxxxx_massive(p, fmass, nhel, nsf):
 
 
 def oxxxxx(p, fmass, nhel, nsf):
-    """ initialize an outgoing fermion"""
+    """initialize an outgoing fermion"""
 
     fo = WaveFunction(2)
     fo[0] = complex(p[0] * nsf, p[3] * nsf)
@@ -430,8 +435,9 @@ def oxxxxx(p, fmass, nhel, nsf):
     # print("fo=", fo)
     return fo
 
+
 def oxxxxx_massless(p, fmass, nhel, nsf):
-    """ initialize an outgoing fermion"""
+    """initialize an outgoing fermion"""
 
     fo = WaveFunction(2)
     fo[0] = complex(p[0] * nsf, p[3] * nsf)
@@ -481,8 +487,9 @@ def oxxxxx_massless(p, fmass, nhel, nsf):
     # print("fo=", fo)
     return fo
 
+
 def oxxxxx_massive(p, fmass, nhel, nsf):
-    """ initialize an outgoing fermion"""
+    """initialize an outgoing fermion"""
 
     fo = WaveFunction(2)
     fo[0] = complex(p[0] * nsf, p[3] * nsf)
@@ -499,13 +506,15 @@ def oxxxxx_massive(p, fmass, nhel, nsf):
         val1 = _lax_cond_nofun(abs(im) == 0, sqm_0, sqm_1)
         val2 = _lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
 
-        fo2 = im * val1 #_lax_cond_nofun(abs(im) == 0, sqm_0, sqm_1)
-        fo3 = ip * nsf * val1 #_lax_cond_nofun(abs(im) == 0, sqm_0, sqm_1)
-        fo4 = im * nsf * val2 #_lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
-        fo5 = ip *val2 # _lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
+        fo2 = im * val1  # _lax_cond_nofun(abs(im) == 0, sqm_0, sqm_1)
+        fo3 = ip * nsf * val1  # _lax_cond_nofun(abs(im) == 0, sqm_0, sqm_1)
+        fo4 = im * nsf * val2  # _lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
+        fo5 = ip * val2  # _lax_cond_nofun(abs(ip) == 0, sqm_0, sqm_1)
 
         # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)]))
+        return np.squeeze(
+            np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)])
+        )
 
     def fmass_nonzero_pp_nonzero(p, fmass, nhel, nsf, nh, pp):
         sf_0 = (1 + nsf + (1 - nsf) * nh) * 0.5
@@ -525,20 +534,22 @@ def oxxxxx_massive(p, fmass, nhel, nsf):
         chi1 = _lax_cond_nofun(
             pp3 == 0.0,
             complex(-1.0 * nh, 0.0),
-            complex(nh * p[1] / sqrt(2.0 * pp * pp3), -p[2] / sqrt(2.0 * pp * pp3))
+            complex(nh * p[1] / sqrt(2.0 * pp * pp3), -p[2] / sqrt(2.0 * pp * pp3)),
         )
         chi0 = complex(sqrt(pp3 * 0.5 / pp), 0.0)
 
         val1 = _lax_cond_nofun(im == 0, chi0, chi1)
         val2 = _lax_cond_nofun(ip == 0, chi0, chi1)
-        
-        fo2 = sfomeg_1 * val1 #_lax_cond_nofun(im == 0, chi0, chi1)
-        fo3 = sfomeg_1 * val2 #_lax_cond_nofun(ip == 0, chi0, chi1)
-        fo4 = sfomeg_0 * val1 #_lax_cond_nofun(im == 0, chi0, chi1)
-        fo5 = sfomeg_0 * val2 #_lax_cond_nofun(ip == 0, chi0, chi1)
+
+        fo2 = sfomeg_1 * val1  # _lax_cond_nofun(im == 0, chi0, chi1)
+        fo3 = sfomeg_1 * val2  # _lax_cond_nofun(ip == 0, chi0, chi1)
+        fo4 = sfomeg_0 * val1  # _lax_cond_nofun(im == 0, chi0, chi1)
+        fo5 = sfomeg_0 * val2  # _lax_cond_nofun(ip == 0, chi0, chi1)
 
         # print("pp!= 0.", np.squeeze(np.array([fo2, fo3, fo4, fo5])))
-        return np.squeeze(np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)]))
+        return np.squeeze(
+            np.array([complex(fo2), complex(fo3), complex(fo4), complex(fo5)])
+        )
 
     def fmass_nonzero(p, fmass, nhel, nsf, nh):
         pp = min(p[0], sqrt(p[1] ** 2 + p[2] ** 2 + p[3] ** 2))
@@ -548,14 +559,13 @@ def oxxxxx_massive(p, fmass, nhel, nsf):
             (p, fmass, nhel, nsf, nh),
             fmass_nonzero_pp_zero,
             (p, fmass, nhel, nsf, nh, pp),
-            fmass_nonzero_pp_nonzero
+            fmass_nonzero_pp_nonzero,
         )
 
         # print("fmass!= 0.", fo2345)
         return fo2345
 
     fo2345 = fmass_nonzero(p.asarray(), fmass, nhel, nsf, nh)
-
 
     # print("final fo2345", fo2345)
 
@@ -567,8 +577,9 @@ def oxxxxx_massive(p, fmass, nhel, nsf):
     # print("fo=", fo)
     return fo
 
+
 def vxxxxx(p, vmass, nhel, nsv):
-    """ initialize a vector wavefunction. nhel=4 is for checking BRST"""
+    """initialize a vector wavefunction. nhel=4 is for checking BRST"""
     vc = WaveFunction(3)
 
     sqh = sqrt(0.5)
@@ -806,7 +817,7 @@ def sxxxxx(p, nss):
 
 
 def txxxxx(p, tmass, nhel, nst):
-    """ initialize a tensor wavefunction"""
+    """initialize a tensor wavefunction"""
 
     tc = WaveFunction(5)
 
@@ -930,7 +941,7 @@ def txxxxx(p, tmass, nhel, nst):
 
 
 def irxxxx(p, mass, nhel, nsr):
-    """ initialize a incoming spin 3/2 wavefunction."""
+    """initialize a incoming spin 3/2 wavefunction."""
 
     # This routines is a python translation of a routine written by
     # K.Mawatari in fortran dated from the 2008/02/26
@@ -1177,7 +1188,7 @@ def irxxxx(p, mass, nhel, nsr):
 
 
 def orxxxx(p, mass, nhel, nsr):
-    """ initialize a incoming spin 3/2 wavefunction."""
+    """initialize a incoming spin 3/2 wavefunction."""
 
     # This routines is a python translation of a routine written by
     # K.Mawatari in fortran dated from the 2008/02/26

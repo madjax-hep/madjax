@@ -16,7 +16,7 @@ logger = logging.getLogger("MG5aMC_PythonMEs.PhaseSpaceGenerator")
 
 
 class Dimension:
-    """ A dimension object specifying a specific integration dimension."""
+    """A dimension object specifying a specific integration dimension."""
 
     def __init__(self, name, folded=False):
         self.name = name
@@ -30,7 +30,7 @@ class Dimension:
 
 
 class DiscreteDimension(Dimension):
-    """ A dimension object specifying a specific discrete integration dimension."""
+    """A dimension object specifying a specific discrete integration dimension."""
 
     def __init__(self, name, values, **opts):
         try:
@@ -52,7 +52,7 @@ class DiscreteDimension(Dimension):
 
 
 class ContinuousDimension(Dimension):
-    """ A dimension object specifying a specific discrete integration dimension."""
+    """A dimension object specifying a specific discrete integration dimension."""
 
     def __init__(self, name, lower_bound=0.0, upper_bound=1.0, **opts):
         super().__init__(name, **opts)
@@ -76,23 +76,23 @@ class DimensionList(list):
         super().__init__(*args, **opts)
 
     def volume(self):
-        """ Returns the volue of the complete list of dimensions."""
+        """Returns the volue of the complete list of dimensions."""
         vol = 1.0
         for d in self:
             vol *= d.length()
         return vol
 
     def append(self, arg, **opts):
-        """ Type-checking. """
+        """Type-checking."""
         assert isinstance(arg, Dimension)
         super().append(arg, **opts)
 
     def get_discrete_dimensions(self):
-        """ Access all discrete dimensions. """
+        """Access all discrete dimensions."""
         return DimensionList(d for d in self if isinstance(d, DiscreteDimension))
 
     def get_continuous_dimensions(self):
-        """ Access all discrete dimensions. """
+        """Access all discrete dimensions."""
         return DimensionList(d for d in self if isinstance(d, ContinuousDimension))
 
     def random_sample(self):
@@ -249,7 +249,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             raise InvalidCmd("This basic generator does not support decay topologies.")
 
     def get_dimensions(self):
-        """ Make sure the collider setup is supported."""
+        """Make sure the collider setup is supported."""
 
         # Check if the beam configuration is supported
         if (not abs(self.beam_types[0]) == abs(self.beam_types[1]) == 1) and (
@@ -279,7 +279,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             return 1.0
 
         return jax.numpy.power((math.pi / 2.0), n - 1) * (
-            jax.numpy.power((E_cm ** 2), n - 2)
+            jax.numpy.power((E_cm**2), n - 2)
             / (math.factorial(n - 1) * math.factorial(n - 2))
         )
 
@@ -317,7 +317,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
     def rho(M, N, m):
         """Returns sqrt((sqr(M)-sqr(N+m))*(sqr(M)-sqr(N-m)))/(8.*sqr(M))"""
 
-        Msqr = M ** 2
+        Msqr = M**2
         return ((Msqr - (N + m) ** 2) * (Msqr - (N - m) ** 2)) ** 0.5 / (8.0 * Msqr)
 
     def setInitialStateMomenta(self, output_momenta, E_cm):
@@ -351,16 +351,16 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
             else:
                 M1sq = self.initial_masses[0] ** 2
                 M2sq = self.initial_masses[1] ** 2
-                E1 = (E_cm ** 2 + M1sq - M2sq) / E_cm
-                E2 = (E_cm ** 2 - M1sq + M2sq) / E_cm
+                E1 = (E_cm**2 + M1sq - M2sq) / E_cm
+                E2 = (E_cm**2 - M1sq + M2sq) / E_cm
                 Z = (
                     jax.numpy.sqrt(
-                        E_cm ** 4
-                        - 2 * E_cm ** 2 * M1sq
-                        - 2 * E_cm ** 2 * M2sq
-                        + M1sq ** 2
+                        E_cm**4
+                        - 2 * E_cm**2 * M1sq
+                        - 2 * E_cm**2 * M2sq
+                        + M1sq**2
                         - 2 * M1sq * M2sq
-                        + M2sq ** 2
+                        + M2sq**2
                     )
                     / E_cm
                 )
@@ -462,7 +462,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 # Here tau is fixed by the \delta(xb_1*xb_2*s - m_h**2) which sets tau to
                 PDF_tau = tau_min
                 # Account for the \delta(xb_1*xb_2*s - m_h**2) and corresponding y_cm matching to unit volume
-                wgt *= 1.0 / self.collider_energy ** 2
+                wgt *= 1.0 / self.collider_energy**2
             else:
                 # Rescale tau appropriately
                 PDF_tau = tau_min + (tau_max - tau_min) * PDF_tau
@@ -567,14 +567,14 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 2.0 * random_variables[self.n_final - 2 + 2 * (i - self.n_initial)]
                 - 1.0
             )
-            sin_theta = jax.numpy.sqrt(1.0 - cos_theta ** 2)
+            sin_theta = jax.numpy.sqrt(1.0 - cos_theta**2)
             phi = (
                 2.0
                 * math.pi
                 * random_variables[self.n_final - 1 + 2 * (i - self.n_initial)]
             )
             cos_phi = jax.numpy.cos(phi)
-            sin_phi = jax.numpy.sqrt(1.0 - cos_phi ** 2)
+            sin_phi = jax.numpy.sqrt(1.0 - cos_phi**2)
 
             sin_phi = jax.numpy.where(phi > math.pi, (-1.0) * sin_phi, sin_phi)
             # if (phi > math.pi):
@@ -638,7 +638,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         return weight
 
     def invertKinematics(self, E_cm, momenta):
-        """ Returns the random variables that yields the specified momenta configuration."""
+        """Returns the random variables that yields the specified momenta configuration."""
 
         # Make sure the right number of momenta are passed
         assert len(momenta) == (self.n_initial + self.n_final)
@@ -684,9 +684,9 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
                 p.cosTheta() + 1.0
             ) / 2.0
             phi = p.phi()
-            #if phi < 0.0:
+            # if phi < 0.0:
             #    phi += 2.0 * math.pi
-            phi = jax.numpy.where(phi<0, phi + 2.0*jax.numpy.pi, phi)
+            phi = jax.numpy.where(phi < 0, phi + 2.0 * jax.numpy.pi, phi)
             random_variables[self.n_final - 1 + 2 * (i - self.n_initial)] = phi / (
                 2.0 * math.pi
             )
@@ -694,7 +694,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         return random_variables, weight
 
     def invertIntermediatesMassive(self, M, E_cm, random_variables):
-        """ Invert intermediate masses for a massive final state."""
+        """Invert intermediate masses for a massive final state."""
 
         K = list(M)
         for i in range(1, self.n_final):
@@ -717,7 +717,7 @@ class FlatInvertiblePhasespace(VirtualPhaseSpaceGenerator):
         return weight
 
     def invertIntermediatesMassless(self, K, E_cm, random_variables):
-        """ Invert intermediate masses for a massless final state."""
+        """Invert intermediate masses for a massless final state."""
 
         for i in range(2, self.n_final):
             u = (K[i - 1] / K[i - 2]) ** 2

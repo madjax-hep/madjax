@@ -23,7 +23,7 @@ logger = logging.getLogger('madjax.PhaseSpaceGenerator')
 
 
 class Dimension:
-    """ A dimension object specifying a specific integration dimension."""
+    """A dimension object specifying a specific integration dimension."""
 
     def __init__(self, name, folded=False):
         self.name = name
@@ -37,7 +37,7 @@ class Dimension:
 
 
 class DiscreteDimension(Dimension):
-    """ A dimension object specifying a specific discrete integration dimension."""
+    """A dimension object specifying a specific discrete integration dimension."""
 
     def __init__(self, name, values, **opts):
         try:
@@ -59,7 +59,7 @@ class DiscreteDimension(Dimension):
 
 
 class ContinuousDimension(Dimension):
-    """ A dimension object specifying a specific discrete integration dimension."""
+    """A dimension object specifying a specific discrete integration dimension."""
 
     def __init__(self, name, lower_bound=0.0, upper_bound=1.0, **opts):
         super().__init__(name, **opts)
@@ -83,23 +83,23 @@ class DimensionList(list):
         super().__init__(*args, **opts)
 
     def volume(self):
-        """ Returns the volue of the complete list of dimensions."""
+        """Returns the volue of the complete list of dimensions."""
         vol = 1.0
         for d in self:
             vol *= d.length()
         return vol
 
     def append(self, arg, **opts):
-        """ Type-checking. """
+        """Type-checking."""
         assert isinstance(arg, Dimension)
         super().append(arg, **opts)
 
     def get_discrete_dimensions(self):
-        """ Access all discrete dimensions. """
+        """Access all discrete dimensions."""
         return DimensionList(d for d in self if isinstance(d, DiscreteDimension))
 
     def get_continuous_dimensions(self):
-        """ Access all discrete dimensions. """
+        """Access all discrete dimensions."""
         return DimensionList(d for d in self if isinstance(d, ContinuousDimension))
 
     def random_sample(self):
@@ -314,7 +314,7 @@ def get_flatWeights(E_cm, n, mass=None):
     # return out_
 
     return jnp.power((math.pi / 2.0), n - 1) * (
-        jnp.power((E_cm ** 2), n - 2) / (math.factorial(n - 1) * math.factorial(n - 2))
+        jnp.power((E_cm**2), n - 2) / (math.factorial(n - 1) * math.factorial(n - 2))
     )
 
 
@@ -393,16 +393,16 @@ def setInitialStateMomenta(PS_inputs, output_momenta, E_cm):
         else:
             M1sq = initial_masses[0] ** 2
             M2sq = initial_masses[1] ** 2
-            E1 = (E_cm ** 2 + M1sq - M2sq) / E_cm
-            E2 = (E_cm ** 2 - M1sq + M2sq) / E_cm
+            E1 = (E_cm**2 + M1sq - M2sq) / E_cm
+            E2 = (E_cm**2 - M1sq + M2sq) / E_cm
             Z = (
                 jnp.sqrt(
-                    E_cm ** 4
-                    - 2 * E_cm ** 2 * M1sq
-                    - 2 * E_cm ** 2 * M2sq
-                    + M1sq ** 2
+                    E_cm**4
+                    - 2 * E_cm**2 * M1sq
+                    - 2 * E_cm**2 * M2sq
+                    + M1sq**2
                     - 2 * M1sq * M2sq
-                    + M2sq ** 2
+                    + M2sq**2
                 )
                 / E_cm
             )
@@ -520,7 +520,7 @@ def get_PS_point(PS_inputs, random_variables):
             # Here tau is fixed by the \delta(xb_1*xb_2*s - m_h**2) which sets tau to
             PDF_tau = tau_min
             # Account for the \delta(xb_1*xb_2*s - m_h**2) and corresponding y_cm matching to unit volume
-            wgt *= 1.0 / collider_energy ** 2
+            wgt *= 1.0 / collider_energy**2
         else:
             # Rescale tau appropriately
             PDF_tau = tau_min + (tau_max - tau_min) * PDF_tau
@@ -571,7 +571,7 @@ def generateKinematics(PS_inputs, E_cm, random_variables):
     try:
         assert len(random_variables) == nDimPhaseSpace(n_final)
     except:
-        raise RuntimeError('need {} random variables'.format(nDimPhaseSpace(n_final)))
+        raise RuntimeError(f'need {nDimPhaseSpace(n_final)} random variables')
 
     # Make sure that none of the random_variables is NaN.
     # Lukas: not part of computation ignore for now
@@ -622,10 +622,10 @@ def generateKinematics(PS_inputs, E_cm, random_variables):
             * rho(M[i - n_initial], M[i - n_initial + 1], masses[i - n_initial])
         )
         cos_theta = 2.0 * random_variables[n_final - 2 + 2 * (i - n_initial)] - 1.0
-        sin_theta = jnp.sqrt(1.0 - cos_theta ** 2)
+        sin_theta = jnp.sqrt(1.0 - cos_theta**2)
         phi = 2.0 * math.pi * random_variables[n_final - 1 + 2 * (i - n_initial)]
         cos_phi = jnp.cos(phi)
-        sin_phi = jnp.sqrt(1.0 - cos_phi ** 2)
+        sin_phi = jnp.sqrt(1.0 - cos_phi**2)
 
         sin_phi = jnp.where(phi > math.pi, (-1.0) * sin_phi, sin_phi)
         # if (phi > math.pi):
