@@ -67,7 +67,7 @@ class _Vector(object):
         return self.vector[index]
 
     def __setitem__(self, index, value):
-        self.vector = jax.ops.index_update(self.vector, index, value)
+        self.vector = self.vector.at[index].set(value)
 
     def __sub__(self, other):
         return _Vector(self.vector - other.vector)
