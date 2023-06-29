@@ -9,7 +9,7 @@ COPY --chown=moby . /code
 # hadolint ignore=DL3003
 RUN cd /code && \
     python -m pip install --upgrade --no-cache-dir pip setuptools wheel && \
-    python -m pip install --no-cache-dir --verbose . && \
+    python -m pip install --no-cache-dir . && \
     python -m pip list && \
     cp -r "$(madjax-config)" "$(dirname $(dirname $(command -v mg5_aMC)))/PLUGIN/"
 
