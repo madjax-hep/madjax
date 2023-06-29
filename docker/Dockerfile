@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=scailfin/madgraph5-amc-nlo:mg5_amc2.8.1
+ARG BASE_IMAGE=scailfin/madgraph5-amc-nlo:mg5_amc3.5.0
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE} as base
 
