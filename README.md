@@ -23,7 +23,7 @@ python -m pip install madjax
 way to do this is through the use of official `madjax` docker images
 
 ```console
-docker pull madjax/madjax
+docker pull madjax-hep/madjax
 ```
 
 It is also possible to use `madjax` with a local `MadGraph` install.

@@ -17,7 +17,7 @@ jobs:
     - name: Build Docker image
       uses: docker/build-push-action@v1
       with:
-        repository: madjax/madjax
+        repository: madjax-hep/madjax
         dockerfile: docker/Dockerfile
         tags: test
         tag_with_sha: true
@@ -28,4 +28,4 @@ jobs:
     - name: Run CLI API check
       run: |
         printf "\nmadjax-config\n"
-        docker run --rm madjax/madjax:test "madjax-config"
+        docker run --rm madjax-hep/madjax:test "madjax-config"
