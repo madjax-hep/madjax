@@ -20,10 +20,11 @@ python -m pip install madjax
 ```
 
 `madjax` relies on `MadGraph` for code generation using its plugin. The recommended
-way to do this is through the use of official `madjax` docker images
+way to do this is to build a `madjax` docker image
 
 ```console
-docker pull madjax-hep/madjax
+docker build --file docker/Dockerfile --tag madjax-hep/madjax:local .
+# you can also just run make
 ```
 
 It is also possible to use `madjax` with a local `MadGraph` install.
