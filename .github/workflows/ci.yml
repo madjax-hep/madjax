@@ -29,6 +29,10 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest -r sx
+    - name: Debug
+      run: |
+        madjax-config
+        python -m pip show madjax
     - name: Test matrix element generation
       run: |
         cp -r "$(madjax-config)" /usr/local/venv/MG5_aMC/PLUGIN/
