@@ -14,6 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     container:
       image: scailfin/madgraph5-amc-nlo:mg5_amc3.5.0
+      options: --user root
     strategy:
       matrix:
         os: [ubuntu-latest]
