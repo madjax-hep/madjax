@@ -31,6 +31,6 @@ jobs:
         python -m pytest -r sx
     - name: Test matrix element generation
       run: |
-        cp -r "$(madjax-config)" "$(dirname $(dirname $(command -v mg5_aMC)))/PLUGIN/"
+        cp -r "$(madjax-config)" /usr/local/venv/MG5_aMC/PLUGIN/
         mg5_aMC --mode=madjax_me_gen examples/ee_to_mumuj.mg5
         ls -lhtra ee_to_mumuj_output/
