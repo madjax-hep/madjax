@@ -33,6 +33,8 @@ jobs:
       run: |
         madjax-config
         python -m pip show madjax
+        pwd
+        ls -lhtra $(madjax-config)
     - name: Test matrix element generation
       run: |
         cp -r "$(madjax-config)" /usr/local/venv/MG5_aMC/PLUGIN/
