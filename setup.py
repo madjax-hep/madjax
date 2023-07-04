@@ -11,7 +11,7 @@ extras_require["lint"] = sorted(set(["pyflakes", "black"]))
 extras_require["test"] = sorted(
     set(
         [
-            "pytest~=3.5",
+            "pytest~=7.4.0",
             "pydocstyle",
             "papermill~=1.0",
         ]
