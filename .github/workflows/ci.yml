@@ -28,7 +28,7 @@ jobs:
         python -m pip list
     - name: Test with pytest
       run: |
-        python -m pytest -r sx
+        pytest -r sx
     - name: Debug
       run: |
         madjax-config
